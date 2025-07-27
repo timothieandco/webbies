@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timothie & Co - Jewelry Customizer</title>
+    <meta name="description" content="Design your custom jewelry by dragging and dropping charms onto necklaces">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-navigation">
+                    <a href="./home.html" class="nav-home-link">← Back to Home</a>
+                </div>
+                <h1 class="brand-title">Timothie & Co</h1>
+                <h2 class="page-title">Jewelry Customizer</h2>
+                <p class="page-subtitle">Design your perfect piece by placing charms on the necklace</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Canvas Container -->
+            <section class="canvas-section">
+                <div class="canvas-container">
+                    <div id="jewelry-canvas" class="jewelry-canvas">
+                        <!-- Konva canvas will be inserted here -->
+                    </div>
+                    <div class="canvas-overlay">
+                        <div class="loading-indicator" id="loading-indicator">
+                            <div class="spinner"></div>
+                            <p>Loading jewelry customizer...</p>
+                        </div>
+                        <div class="error-message" id="error-message" style="display: none;">
+                            <h3>Oops! Something went wrong</h3>
+                            <p id="error-text"></p>
+                            <button id="retry-button" class="retry-button">Try Again</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Canvas Controls -->
+                <div class="canvas-controls">
+                    <div class="control-group">
+                        <button id="undo-btn" class="control-btn" disabled>
+                            <span class="btn-icon">↶</span>
+                            Undo
+                        </button>
+                        <button id="redo-btn" class="control-btn" disabled>
+                            <span class="btn-icon">↷</span>
+                            Redo
+                        </button>
+                        <button id="clear-btn" class="control-btn">
+                            <span class="btn-icon">🗑</span>
+                            Clear All
+                        </button>
+                    </div>
+                    <div class="control-group">
+                        <button id="save-btn" class="control-btn primary">
+                            <span class="btn-icon">💾</span>
+                            Save Design
+                        </button>
+                        <button id="export-btn" class="control-btn success">
+                            <span class="btn-icon">📄</span>
+                            Export Reference
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Necklace Selection -->
+                <section class="necklace-section">
+                    <h3 class="section-title">Choose Your Base</h3>
+                    <div class="necklace-options">
+                        <div class="necklace-option active" data-necklace="classic-chain">
+                            <img id="necklace-thumb" alt="Classic Chain" class="necklace-thumb">
+                            <span class="necklace-name">Classic Chain</span>
+                        </div>
+                        <!-- More necklace options will be added dynamically -->
+                    </div>
+                </section>
+
+                <!-- Charm Library -->
+                <section class="charm-section">
+                    <h3 class="section-title">Charm Library</h3>
+                    
+                    <!-- Charm Categories -->
+                    <div class="charm-categories">
+                        <button class="category-btn active" data-category="all">All</button>
+                        <button class="category-btn" data-category="symbols">Symbols</button>
+                        <button class="category-btn" data-category="letters">Letters</button>
+                        <button class="category-btn" data-category="birthstones">Birthstones</button>
+                        <button class="category-btn" data-category="animals">Animals</button>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="search-container">
+                        <input type="text" id="charm-search" placeholder="Search charms..." class="search-input">
+                        <span class="search-icon">🔍</span>
+                    </div>
+
+                    <!-- Charm Grid -->
+                    <div id="charm-library" class="charm-library">
+                        <!-- Charms will be loaded dynamically from JavaScript -->
+                    </div>
+                </section>
+
+                <!-- Design Info -->
+                <section class="design-info">
+                    <h3 class="section-title">Design Summary</h3>
+                    <div class="design-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Charms Used:</span>
+                            <span id="charm-count" class="stat-value">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Estimated Price:</span>
+                            <span id="total-price" class="stat-value">$0</span>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2024 Timothie & Co. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Modal for Export -->
+    <div id="export-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Assembly Reference</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <label class="export-option">
+                        <input type="radio" name="export-format" value="png" checked>
+                        <span>High-Resolution Image (PNG)</span>
+                    </label>
+                    <label class="export-option">
+                        <input type="radio" name="export-format" value="pdf">
+                        <span>PDF with Instructions</span>
+                    </label>
+                    <label class="export-option">
+                        <input type="radio" name="export-format" value="json">
+                        <span>Data Export (JSON)</span>
+                    </label>
+                </div>
+                <div class="export-preview" id="export-preview">
+                    <!-- Preview will be generated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-export" class="btn secondary">Cancel</button>
+                <button id="confirm-export" class="btn primary">Download</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

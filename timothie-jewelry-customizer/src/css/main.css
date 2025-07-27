@@ -1,0 +1,960 @@
+/* =============================================================================
+   Timothie & Co Jewelry Customizer - Brand Design System
+   ============================================================================= */
+
+/* =============================================================================
+   Brand Color Palette & Typography Variables
+   ============================================================================= */
+:root {
+    /* Timothie & Co Brand Colors */
+    --primary-blush: rgb(239, 202, 200);          /* Soft pink/blush */
+    --secondary-dusty-rose: rgb(245, 222, 221);   /* Dusty rose */
+    --accent-coral: rgb(210, 107, 101);           /* Muted coral/terracotta */
+    --neutral-charcoal: rgb(18, 18, 18);          /* Dark charcoal */
+    --background-cream: rgb(254, 252, 250);       /* Soft cream/off-white */
+    
+    /* Additional Brand-Aligned Colors */
+    --soft-white: rgb(255, 255, 255);
+    --warm-gray: rgb(128, 120, 118);
+    --light-gray: rgb(248, 246, 245);
+    --border-light: rgb(238, 230, 228);
+    --shadow-soft: rgba(210, 107, 101, 0.08);
+    --shadow-medium: rgba(210, 107, 101, 0.12);
+    --shadow-strong: rgba(18, 18, 18, 0.15);
+    
+    /* Brand Typography */
+    --font-primary: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-decorative: 'Dancing Script', cursive;
+    --font-headings: 'Cinzel', serif;
+    --font-secondary: 'Playfair Display', serif;
+    
+    /* Brand Spacing Grid (27-52px) */
+    --spacing-xs: 27px;
+    --spacing-sm: 35px;
+    --spacing-md: 42px;
+    --spacing-lg: 52px;
+    
+    /* Brand Border Radius */
+    --radius-sm: 12px;
+    --radius-md: 18px;
+    --radius-lg: 24px;
+    
+    /* Brand Transitions */
+    --transition-soft: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-quick: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =============================================================================
+   CSS Reset and Base Styles
+   ============================================================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-primary);
+    line-height: 1.6;
+    color: var(--neutral-charcoal);
+    background: linear-gradient(135deg, var(--background-cream) 0%, var(--secondary-dusty-rose) 100%);
+    min-height: 100vh;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 1600px;
+    margin: 0 auto;
+    background: var(--soft-white);
+    box-shadow: 0 0 var(--spacing-lg) var(--shadow-medium);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+/* =============================================================================
+   Header Styles - Romantic & Elegant
+   ============================================================================= */
+.app-header {
+    background: linear-gradient(135deg, var(--primary-blush) 0%, var(--secondary-dusty-rose) 50%, var(--accent-coral) 100%);
+    color: var(--soft-white);
+    padding: var(--spacing-lg);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.app-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="1.5" fill="rgba(255,255,255,0.15)"/><circle cx="60" cy="30" r="0.8" fill="rgba(255,255,255,0.08)"/></svg>');
+    opacity: 0.6;
+}
+
+.header-content {
+    position: relative;
+    z-index: 1;
+}
+
+.header-navigation {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    z-index: 2;
+}
+
+.nav-home-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--soft-white);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition-soft);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.nav-home-link:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+    color: var(--soft-white);
+}
+
+.brand-title {
+    font-family: var(--font-headings);
+    font-size: 3.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 12px rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.02em;
+}
+
+.page-title {
+    font-family: var(--font-secondary);
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    opacity: 0.95;
+    font-style: italic;
+}
+
+.page-subtitle {
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    opacity: 0.85;
+    max-width: 600px;
+    margin: 0 auto;
+    font-weight: 300;
+}
+
+/* =============================================================================
+   Main Content Layout - Generous Spacing
+   ============================================================================= */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    flex: 1;
+}
+
+.canvas-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.sidebar {
+    background: linear-gradient(145deg, var(--light-gray) 0%, var(--soft-white) 100%);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    height: fit-content;
+    border: 1px solid var(--border-light);
+    width: 400px;
+    box-shadow: 0 8px var(--spacing-xs) var(--shadow-soft);
+}
+
+/* =============================================================================
+   Canvas Styles - Elegant Container
+   ============================================================================= */
+.canvas-container {
+    position: relative;
+    background: var(--soft-white);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 12px var(--spacing-md) var(--shadow-medium);
+    overflow: hidden;
+    border: 2px solid var(--border-light);
+}
+
+.jewelry-canvas {
+    width: 100%;
+    min-height: 750px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: 
+        radial-gradient(circle at 25% 25%, var(--light-gray) 0%, transparent 60%),
+        radial-gradient(circle at 75% 75%, var(--secondary-dusty-rose) 0%, transparent 50%),
+        linear-gradient(135deg, var(--soft-white) 0%, var(--background-cream) 100%);
+}
+
+.canvas-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+}
+
+.loading-indicator {
+    text-align: center;
+    color: var(--accent-coral);
+    font-family: var(--font-primary);
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--border-light);
+    border-left: 4px solid var(--accent-coral);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-message {
+    text-align: center;
+    color: var(--accent-coral);
+    padding: var(--spacing-lg);
+    font-family: var(--font-primary);
+}
+
+.error-message h3 {
+    margin-bottom: 1rem;
+    color: var(--accent-coral);
+    font-family: var(--font-secondary);
+}
+
+.retry-button {
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--accent-coral) 0%, var(--primary-blush) 100%);
+    color: var(--soft-white);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 500;
+    font-family: var(--font-primary);
+    transition: var(--transition-soft);
+    box-shadow: 0 4px 12px var(--shadow-soft);
+}
+
+.retry-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--shadow-medium);
+}
+
+/* =============================================================================
+   Canvas Controls - Brand Styled
+   ============================================================================= */
+.canvas-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs);
+    background: var(--soft-white);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 12px var(--shadow-soft);
+}
+
+.control-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--border-light);
+    background: var(--soft-white);
+    color: var(--neutral-charcoal);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 500;
+    font-family: var(--font-primary);
+    transition: var(--transition-soft);
+    font-size: 0.95rem;
+    box-shadow: 0 2px 8px var(--shadow-soft);
+}
+
+.control-btn:hover:not(:disabled) {
+    background: var(--light-gray);
+    border-color: var(--primary-blush);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px var(--shadow-medium);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.control-btn.primary {
+    background: linear-gradient(135deg, var(--accent-coral) 0%, var(--primary-blush) 100%);
+    color: var(--soft-white);
+    border-color: var(--accent-coral);
+}
+
+.control-btn.primary:hover {
+    background: linear-gradient(135deg, var(--primary-blush) 0%, var(--accent-coral) 100%);
+    transform: translateY(-2px);
+}
+
+.control-btn.success {
+    background: linear-gradient(135deg, var(--primary-blush) 0%, var(--secondary-dusty-rose) 100%);
+    color: var(--neutral-charcoal);
+    border-color: var(--primary-blush);
+}
+
+.control-btn.success:hover {
+    background: linear-gradient(135deg, var(--secondary-dusty-rose) 0%, var(--primary-blush) 100%);
+    transform: translateY(-2px);
+}
+
+.btn-icon {
+    font-size: 1.1rem;
+}
+
+/* =============================================================================
+   Sidebar Sections - Romantic Typography
+   ============================================================================= */
+.section-title {
+    font-family: var(--font-secondary);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--neutral-charcoal);
+    border-bottom: 2px solid var(--primary-blush);
+    padding-bottom: 0.8rem;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: var(--accent-coral);
+    border-radius: 1px;
+}
+
+/* Necklace Selection */
+.necklace-section {
+    margin-bottom: var(--spacing-md);
+}
+
+.necklace-options {
+    display: grid;
+    gap: 1rem;
+}
+
+.necklace-option {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-soft);
+    background: var(--soft-white);
+}
+
+.necklace-option:hover {
+    border-color: var(--primary-blush);
+    background: linear-gradient(135deg, var(--soft-white) 0%, var(--light-gray) 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px var(--shadow-soft);
+}
+
+.necklace-option.active {
+    border-color: var(--accent-coral);
+    background: linear-gradient(135deg, var(--light-gray) 0%, var(--secondary-dusty-rose) 100%);
+    box-shadow: 0 6px 24px var(--shadow-medium);
+}
+
+.necklace-thumb {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    background: var(--light-gray);
+    border: 2px solid var(--border-light);
+}
+
+.necklace-name {
+    font-weight: 500;
+    color: var(--neutral-charcoal);
+    font-family: var(--font-primary);
+    font-size: 1.05rem;
+}
+
+/* Charm Library */
+.charm-section {
+    margin-bottom: var(--spacing-md);
+}
+
+.charm-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.category-btn {
+    padding: 0.8rem 1.4rem;
+    border: 1px solid var(--border-light);
+    background: var(--soft-white);
+    color: var(--warm-gray);
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: var(--font-primary);
+    transition: var(--transition-soft);
+    box-shadow: 0 2px 8px var(--shadow-soft);
+}
+
+.category-btn:hover {
+    background: var(--light-gray);
+    border-color: var(--primary-blush);
+    transform: translateY(-1px);
+}
+
+.category-btn.active {
+    background: linear-gradient(135deg, var(--accent-coral) 0%, var(--primary-blush) 100%);
+    color: var(--soft-white);
+    border-color: var(--accent-coral);
+    box-shadow: 0 4px 16px var(--shadow-medium);
+}
+
+.search-container {
+    position: relative;
+    margin-bottom: var(--spacing-xs);
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1.2rem;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-family: var(--font-primary);
+    background: var(--soft-white);
+    transition: var(--transition-soft);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--accent-coral);
+    box-shadow: 0 0 0 3px rgba(210, 107, 101, 0.1);
+    background: var(--light-gray);
+}
+
+.search-icon {
+    position: absolute;
+    right: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--warm-gray);
+    font-size: 1.1rem;
+}
+
+.charm-library {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 1rem;
+    background: var(--soft-white);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+}
+
+.charm-item {
+    position: relative;
+    aspect-ratio: 1;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    cursor: grab;
+    transition: var(--transition-soft);
+    background: var(--soft-white);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    box-shadow: 0 2px 8px var(--shadow-soft);
+}
+
+.charm-item:hover {
+    border-color: var(--accent-coral);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px var(--shadow-medium);
+    z-index: 10;
+}
+
+.charm-item:hover .charm-image {
+    transform: scale(2.5);
+}
+
+.charm-item:active {
+    cursor: grabbing;
+}
+
+.charm-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    background: var(--light-gray);
+    transform: scale(2.2);
+    transition: var(--transition-soft);
+    image-rendering: -webkit-optimize-contrast;
+    filter: contrast(1.03) brightness(1.01) saturate(1.05);
+}
+
+.charm-name,
+.charm-price {
+    display: none;
+}
+
+/* Tooltip styles - Brand styled */
+.charm-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--neutral-charcoal);
+    color: var(--soft-white);
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    font-family: var(--font-primary);
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease 0.3s;
+    margin-bottom: 10px;
+    pointer-events: none;
+    box-shadow: 0 6px 24px var(--shadow-strong);
+}
+
+.charm-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--neutral-charcoal);
+}
+
+.charm-item:hover .charm-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.2s ease 0.5s;
+}
+
+/* Ensure tooltip doesn't overflow on edges */
+.charm-library .charm-item:first-child .charm-tooltip,
+.charm-library .charm-item:nth-child(4n+1) .charm-tooltip {
+    left: 0;
+    transform: translateX(0);
+}
+
+.charm-library .charm-item:nth-child(4n) .charm-tooltip {
+    left: auto;
+    right: 0;
+    transform: translateX(0);
+}
+
+/* Design Info */
+.design-info {
+    background: linear-gradient(135deg, var(--soft-white) 0%, var(--light-gray) 100%);
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 16px var(--shadow-soft);
+}
+
+.design-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 0.95rem;
+    color: var(--warm-gray);
+    font-family: var(--font-primary);
+}
+
+.stat-value {
+    font-weight: 600;
+    color: var(--neutral-charcoal);
+    font-family: var(--font-secondary);
+    font-size: 1.05rem;
+}
+
+/* =============================================================================
+   Modal Styles - Elegant & Romantic
+   ============================================================================= */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(18, 18, 18, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+}
+
+.modal-content {
+    background: var(--soft-white);
+    border-radius: var(--radius-md);
+    max-width: 600px;
+    width: 90vw;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 24px 80px var(--shadow-strong);
+    border: 1px solid var(--border-light);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs);
+    border-bottom: 1px solid var(--border-light);
+    background: linear-gradient(135deg, var(--light-gray) 0%, var(--soft-white) 100%);
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--neutral-charcoal);
+    font-family: var(--font-secondary);
+    font-size: 1.3rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--warm-gray);
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: var(--transition-soft);
+}
+
+.modal-close:hover {
+    background: var(--light-gray);
+    color: var(--accent-coral);
+}
+
+.modal-body {
+    padding: var(--spacing-xs);
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.export-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.export-option {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-soft);
+    background: var(--soft-white);
+    font-family: var(--font-primary);
+}
+
+.export-option:hover {
+    border-color: var(--primary-blush);
+    background: var(--light-gray);
+    transform: translateY(-1px);
+}
+
+.export-option input[type="radio"] {
+    margin: 0;
+    accent-color: var(--accent-coral);
+}
+
+.export-preview {
+    border: 2px dashed var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-lg);
+    text-align: center;
+    color: var(--warm-gray);
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--light-gray);
+    font-family: var(--font-primary);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.2rem;
+    padding: var(--spacing-xs);
+    border-top: 1px solid var(--border-light);
+    background: var(--light-gray);
+}
+
+.btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 500;
+    font-family: var(--font-primary);
+    transition: var(--transition-soft);
+    box-shadow: 0 4px 12px var(--shadow-soft);
+}
+
+.btn.secondary {
+    background: var(--warm-gray);
+    color: var(--soft-white);
+}
+
+.btn.secondary:hover {
+    background: var(--neutral-charcoal);
+    transform: translateY(-1px);
+}
+
+.btn.primary {
+    background: linear-gradient(135deg, var(--accent-coral) 0%, var(--primary-blush) 100%);
+    color: var(--soft-white);
+}
+
+.btn.primary:hover {
+    background: linear-gradient(135deg, var(--primary-blush) 0%, var(--accent-coral) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--shadow-medium);
+}
+
+/* =============================================================================
+   Footer - Elegant & Minimal
+   ============================================================================= */
+.app-footer {
+    padding: var(--spacing-xs);
+    background: linear-gradient(135deg, var(--light-gray) 0%, var(--secondary-dusty-rose) 100%);
+    text-align: center;
+    color: var(--warm-gray);
+    font-size: 0.9rem;
+    font-family: var(--font-primary);
+    border-top: 1px solid var(--border-light);
+}
+
+/* =============================================================================
+   Responsive Design - Brand Consistent
+   ============================================================================= */
+@media (max-width: 1200px) {
+    .main-content {
+        grid-template-columns: 1fr 380px;
+        gap: var(--spacing-md);
+    }
+    
+    .jewelry-canvas {
+        min-height: 650px;
+    }
+    
+    .charm-library {
+        grid-template-columns: repeat(4, 1fr);
+        max-height: 450px;
+    }
+    
+    .sidebar {
+        width: 360px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .sidebar {
+        order: -1;
+        padding: var(--spacing-xs);
+        width: 100%;
+    }
+    
+    .jewelry-canvas {
+        min-height: 600px;
+    }
+    
+    .charm-library {
+        grid-template-columns: repeat(3, 1fr);
+        max-height: 300px;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --spacing-xs: 20px;
+        --spacing-sm: 28px;
+        --spacing-md: 35px;
+        --spacing-lg: 42px;
+    }
+    
+    .app-container {
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+    }
+    
+    .main-content {
+        padding: var(--spacing-xs);
+        gap: var(--spacing-xs);
+    }
+    
+    .brand-title {
+        font-size: 2.4rem;
+    }
+    
+    .page-title {
+        font-size: 1.4rem;
+    }
+    
+    .jewelry-canvas {
+        min-height: 500px;
+    }
+    
+    .canvas-controls {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .control-group {
+        justify-content: center;
+    }
+    
+    .control-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 1.2rem;
+        font-size: 1rem;
+    }
+    
+    .charm-categories {
+        justify-content: center;
+    }
+    
+    .charm-library {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-height: 250px;
+    }
+    
+    .modal-content {
+        width: 95vw;
+        margin: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-header {
+        padding: var(--spacing-md);
+    }
+    
+    .brand-title {
+        font-size: 2rem;
+    }
+    
+    .page-title {
+        font-size: 1.2rem;
+    }
+    
+    .jewelry-canvas {
+        min-height: 450px;
+    }
+    
+    .charm-library {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        max-height: 200px;
+    }
+    
+    .control-btn {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .necklace-thumb {
+        width: 75px;
+        height: 75px;
+    }
+}

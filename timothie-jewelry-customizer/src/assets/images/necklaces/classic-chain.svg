@@ -1,0 +1,49 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Necklace chain -->
+  <defs>
+    <linearGradient id="chainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8e8e8;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#c0c0c0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a0a0a0;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <dropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/>
+    </filter>
+  </defs>
+  
+  <!-- Main chain curve -->
+  <path d="M 50 80 Q 200 200 350 80" 
+        stroke="url(#chainGradient)" 
+        stroke-width="8" 
+        fill="none" 
+        filter="url(#shadow)"
+        stroke-linecap="round"/>
+  
+  <!-- Chain links for detail -->
+  <g stroke="url(#chainGradient)" stroke-width="3" fill="none">
+    <!-- Left side links -->
+    <ellipse cx="70" cy="95" rx="4" ry="6" transform="rotate(-20 70 95)"/>
+    <ellipse cx="90" cy="110" rx="4" ry="6" transform="rotate(-15 90 110)"/>
+    <ellipse cx="110" cy="125" rx="4" ry="6" transform="rotate(-10 110 125)"/>
+    <ellipse cx="130" cy="138" rx="4" ry="6" transform="rotate(-5 130 138)"/>
+    <ellipse cx="150" cy="150" rx="4" ry="6" transform="rotate(0 150 150)"/>
+    <ellipse cx="170" cy="160" rx="4" ry="6" transform="rotate(5 170 160)"/>
+    <ellipse cx="190" cy="168" rx="4" ry="6" transform="rotate(8 190 168)"/>
+    
+    <!-- Center links -->
+    <ellipse cx="200" cy="170" rx="4" ry="6"/>
+    
+    <!-- Right side links -->
+    <ellipse cx="210" cy="168" rx="4" ry="6" transform="rotate(-8 210 168)"/>
+    <ellipse cx="230" cy="160" rx="4" ry="6" transform="rotate(-5 230 160)"/>
+    <ellipse cx="250" cy="150" rx="4" ry="6" transform="rotate(0 250 150)"/>
+    <ellipse cx="270" cy="138" rx="4" ry="6" transform="rotate(5 270 138)"/>
+    <ellipse cx="290" cy="125" rx="4" ry="6" transform="rotate(10 290 125)"/>
+    <ellipse cx="310" cy="110" rx="4" ry="6" transform="rotate(15 310 110)"/>
+    <ellipse cx="330" cy="95" rx="4" ry="6" transform="rotate(20 330 95)"/>
+  </g>
+  
+  <!-- Clasp areas -->
+  <circle cx="50" cy="80" r="6" fill="url(#chainGradient)" filter="url(#shadow)"/>
+  <circle cx="350" cy="80" r="6" fill="url(#chainGradient)" filter="url(#shadow)"/>
+</svg>
