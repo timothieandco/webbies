@@ -3,12 +3,12 @@
  */
 
 // Logo
-import logoHorizontal from '../../assets/images/ui/Logo_Horiz.svg';
+import logoHorizontal from '../../assets/images/ui/Timothie_and_Co_Posters_Poster_US_Canvases_1200_x_628_px_Website.png';
 
 // Collection/Product images for home page
 import artisanCraftsmanship from '../../assets/images/ui/011A2614.jpg';
 import premiumMaterials from '../../assets/images/ui/011A2618.jpg';
-import heroBackground from '../../assets/images/ui/011A2623.jpg';
+import heroBackground from '../../assets/images/ui/011A2658_499ee37e-2c3a-444d-8cf8-d5e72594f535.jpg';
 import meaningfulDesigns from '../../assets/images/ui/011A2632_1.jpg';
 import workshopExcellence from '../../assets/images/ui/011A2674.jpg';
 import customCreations from '../../assets/images/ui/011A2744.jpg';

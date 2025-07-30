@@ -80,10 +80,10 @@ class HeaderScrollEffect {
         const scrollY = window.scrollY;
         
         if (scrollY > 100) {
-            this.header.style.background = 'rgba(255, 255, 255, 0.98)';
+            this.header.style.background = '#EFCAC8';
             this.header.style.boxShadow = '0 4px 20px rgba(210, 107, 101, 0.1)';
         } else {
-            this.header.style.background = 'rgba(255, 255, 255, 0.95)';
+            this.header.style.background = '#EFCAC8';
             this.header.style.boxShadow = 'none';
         }
     }
@@ -95,27 +95,32 @@ class HeaderScrollEffect {
 class MobileMenu {
     constructor() {
         this.toggle = document.querySelector('.mobile-menu-toggle');
-        this.menu = document.querySelector('.nav-menu');
+        this.menuLeft = document.querySelector('.nav-menu-left');
+        this.menuRight = document.querySelector('.nav-menu-right');
         this.init();
     }
 
     init() {
-        if (this.toggle && this.menu) {
+        if (this.toggle && (this.menuLeft || this.menuRight)) {
             this.toggle.addEventListener('click', this.toggleMenu.bind(this));
             
             // Close menu when clicking on a link
-            const navLinks = this.menu.querySelectorAll('.nav-link');
+            const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
                 link.addEventListener('click', () => {
-                    this.menu.classList.remove('mobile-active');
+                    if (this.menuLeft) this.menuLeft.classList.remove('mobile-active');
+                    if (this.menuRight) this.menuRight.classList.remove('mobile-active');
                     this.toggle.classList.remove('active');
                 });
             });
 
             // Close menu when clicking outside
             document.addEventListener('click', (e) => {
-                if (!this.toggle.contains(e.target) && !this.menu.contains(e.target)) {
-                    this.menu.classList.remove('mobile-active');
+                if (!this.toggle.contains(e.target) && 
+                    (!this.menuLeft || !this.menuLeft.contains(e.target)) &&
+                    (!this.menuRight || !this.menuRight.contains(e.target))) {
+                    if (this.menuLeft) this.menuLeft.classList.remove('mobile-active');
+                    if (this.menuRight) this.menuRight.classList.remove('mobile-active');
                     this.toggle.classList.remove('active');
                 }
             });
@@ -123,7 +128,8 @@ class MobileMenu {
     }
 
     toggleMenu() {
-        this.menu.classList.toggle('mobile-active');
+        if (this.menuLeft) this.menuLeft.classList.toggle('mobile-active');
+        if (this.menuRight) this.menuRight.classList.toggle('mobile-active');
         this.toggle.classList.toggle('active');
     }
 }
@@ -335,6 +341,28 @@ class ImageManager {
 }
 
 // =============================================================================
+// Announcement Bar Functionality
+// =============================================================================
+class AnnouncementBar {
+    constructor() {
+        this.arrow = document.querySelector('.announcement-arrow');
+        this.init();
+    }
+
+    init() {
+        if (this.arrow) {
+            this.arrow.addEventListener('click', this.handleClick.bind(this));
+        }
+    }
+
+    handleClick() {
+        // Add functionality for announcement bar navigation
+        console.log('Announcement bar clicked - navigate to private charmshop');
+        // You can add actual navigation logic here
+    }
+}
+
+// =============================================================================
 // Initialize All Components
 // =============================================================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -353,6 +381,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize header scroll effect
     const headerEffect = new HeaderScrollEffect();
     scrollManager.addCallback(() => headerEffect.handleScroll());
+    
+    // Initialize announcement bar
+    new AnnouncementBar();
     
     // Initialize mobile menu
     new MobileMenu();
@@ -393,9 +424,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             @media (max-width: 1024px) {
-                .nav-menu {
+                .nav-menu-left,
+                .nav-menu-right {
                     position: fixed;
-                    top: 80px;
+                    top: 124px;
                     left: 0;
                     right: 0;
                     background: rgba(255, 255, 255, 0.98);
@@ -410,9 +442,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     box-shadow: 0 8px 32px var(--shadow-medium);
                 }
                 
-                .nav-menu.mobile-active {
+                .nav-menu-left.mobile-active,
+                .nav-menu-right.mobile-active {
                     transform: translateY(0);
                     opacity: 1;
+                }
+                
+                .nav-menu-right.mobile-active {
+                    top: 200px; /* Stack below left menu */
                 }
                 
                 .mobile-menu-toggle.active {
@@ -445,5 +482,6 @@ export {
     MobileMenu,
     ScrollAnimations,
     ParallaxEffect,
-    ImageManager
+    ImageManager,
+    AnnouncementBar
 };

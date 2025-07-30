@@ -3,6 +3,11 @@
    ============================================================================= */
 
 /* =============================================================================
+   Google Fonts Import
+   ============================================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+/* =============================================================================
    Font Face Declarations - Authentic Brand Fonts
    ============================================================================= */
 @font-face {
@@ -56,11 +61,11 @@
    ============================================================================= */
 :root {
     /* Timothie & Co Brand Colors */
-    --primary-blush: rgb(239, 202, 200);          /* Soft pink/blush */
+    --primary-blush: #EFCAC8;                     /* Soft pink/blush */
     --secondary-dusty-rose: rgb(245, 222, 221);   /* Dusty rose */
     --accent-coral: rgb(210, 107, 101);           /* Muted coral/terracotta */
     --neutral-charcoal: rgb(18, 18, 18);          /* Dark charcoal */
-    --background-cream: rgb(254, 252, 250);       /* Soft cream/off-white */
+    --background-cream: rgb(254, 252, 250);       /* Soft cream/off-white background */
     
     /* Additional Brand-Aligned Colors */
     --soft-white: rgb(255, 255, 255);
@@ -74,9 +79,9 @@
     /* Brand Typography */
     --font-primary: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-decorative: 'Dancing Script', cursive;
-    --font-headings: 'Cinzel', serif;
-    --font-secondary: 'Playfair Display', serif;
-    --font-dm-serif: 'DM Serif Display', serif;
+    --font-headings: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-secondary: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-dm-serif: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     
     /* Brand Spacing Grid */
     --spacing-xs: 27px;
@@ -115,16 +120,70 @@ body {
     letter-spacing: 0.01em;
 }
 
+h2 {
+    font-family: 'Cinzel', serif;
+    font-weight: 500;
+}
+
+/* =============================================================================
+   Announcement Bar
+   ============================================================================= */
+.announcement-bar {
+    background: var(--primary-blush);
+    color: rgb(0, 0, 0);
+    padding: 8px 0;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.announcement-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.announcement-text {
+    font-family: var(--font-primary);
+    font-weight: 400;
+}
+
+.announcement-arrow {
+    background: none;
+    border: none;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: var(--transition-quick);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.announcement-arrow:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
 /* =============================================================================
    Navigation Header
    ============================================================================= */
 .nav-header {
     position: fixed;
-    top: 0;
+    top: 40px; /* Account for announcement bar */
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--primary-blush);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-light);
     transition: var(--transition-soft);
@@ -137,12 +196,16 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 80px;
+    height: 120px;
+    position: relative;
 }
 
 .nav-logo {
-    height: 50px;
+    height: 100px;
     width: auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .nav-menu {
@@ -152,16 +215,57 @@ body {
     list-style: none;
 }
 
+.nav-menu-left {
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.nav-menu-right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
 .nav-link {
     text-decoration: none;
     color: var(--neutral-charcoal);
-    font-family: var(--font-secondary);
-    font-weight: 500;
-    font-size: 1.05rem;
+    font-family: var(--font-primary);
+    font-weight: 400;
+    font-size: 1rem;
     padding: 0.5rem 1rem;
     border-radius: var(--radius-sm);
     transition: var(--transition-soft);
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nav-icon {
+    padding: 0.5rem;
+}
+
+.nav-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dropdown-arrow {
+    font-size: 0.8rem;
+    transition: var(--transition-quick);
+}
+
+.dropdown:hover .dropdown-arrow {
+    transform: rotate(180deg);
 }
 
 .nav-link:hover {
@@ -169,20 +273,6 @@ body {
     background: rgba(239, 202, 200, 0.1);
 }
 
-.nav-link.cta {
-    background: linear-gradient(135deg, var(--accent-coral) 0%, var(--primary-blush) 100%);
-    color: var(--soft-white);
-    padding: 0.8rem 1.5rem;
-    font-weight: 600;
-    box-shadow: 0 4px 16px var(--shadow-soft);
-}
-
-.nav-link.cta:hover {
-    background: linear-gradient(135deg, var(--primary-blush) 0%, var(--accent-coral) 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px var(--shadow-medium);
-    color: var(--soft-white);
-}
 
 .mobile-menu-toggle {
     display: none;
@@ -202,8 +292,9 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
-    background: linear-gradient(135deg, var(--background-cream) 0%, var(--secondary-dusty-rose) 100%);
+    background: #000;
     overflow: hidden;
+    margin-top: 124px; /* Account for announcement bar + nav */
 }
 
 .hero-background {
@@ -216,7 +307,7 @@ body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    opacity: 0.3;
+    opacity: 0.8;
     z-index: 1;
 }
 
@@ -226,12 +317,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-        135deg, 
-        rgba(254, 252, 250, 0.9) 0%, 
-        rgba(245, 222, 221, 0.8) 50%, 
-        rgba(239, 202, 200, 0.7) 100%
-    );
+    background: rgba(0, 0, 0, 0.4);
     z-index: 2;
 }
 
@@ -243,56 +329,48 @@ body {
     padding: 0 var(--spacing-md);
 }
 
-.hero-subtitle {
+.hero-brand-name {
     font-family: var(--font-decorative);
-    font-size: 1.8rem;
-    color: var(--accent-coral);
-    margin-bottom: 1rem;
-    font-weight: 500;
-}
-
-.hero-title {
-    font-family: var(--font-headings);
     font-size: 4.5rem;
-    font-weight: 600;
-    color: var(--neutral-charcoal);
-    margin-bottom: 1.5rem;
+    font-weight: 400;
+    color: white;
+    margin-bottom: 1rem;
     line-height: 1.2;
     letter-spacing: 0.02em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.hero-description {
-    font-family: var(--font-secondary);
+.hero-tagline {
+    font-family: var(--font-primary);
     font-size: 1.3rem;
-    color: var(--warm-gray);
+    color: white;
     margin-bottom: 3rem;
     line-height: 1.6;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    font-weight: 300;
 }
 
 .hero-cta {
     display: inline-flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.2rem 2.5rem;
-    background: linear-gradient(135deg, var(--accent-coral) 0%, var(--primary-blush) 100%);
-    color: var(--soft-white);
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    background: #E8B4B8;
+    color: white;
     text-decoration: none;
-    border-radius: var(--radius-md);
-    font-family: var(--font-secondary);
-    font-weight: 600;
-    font-size: 1.1rem;
-    box-shadow: 0 8px 32px var(--shadow-medium);
+    border-radius: 6px;
+    font-family: var(--font-primary);
+    font-weight: 500;
+    font-size: 1rem;
     transition: var(--transition-soft);
+    min-width: 120px;
+    text-transform: capitalize;
 }
 
 .hero-cta:hover {
-    background: linear-gradient(135deg, var(--primary-blush) 0%, var(--accent-coral) 100%);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 48px var(--shadow-strong);
-    color: var(--soft-white);
+    background: #D4A1A5;
+    transform: translateY(-2px);
+    color: white;
 }
 
 /* =============================================================================
@@ -322,7 +400,7 @@ body {
 }
 
 .section-title {
-    font-family: var(--font-headings);
+    font-family: 'Cinzel', serif;
     font-size: 3rem;
     color: var(--neutral-charcoal);
     margin-bottom: 1rem;
@@ -330,12 +408,13 @@ body {
 }
 
 .section-description {
-    font-family: var(--font-secondary);
+    font-family: var(--font-primary);
     font-size: 1.2rem;
     color: var(--warm-gray);
     max-width: 600px;
     margin: 0 auto;
     line-height: 1.6;
+    font-weight: 400;
 }
 
 .steps-grid {
@@ -370,18 +449,18 @@ body {
     color: var(--soft-white);
     font-family: var(--font-headings);
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 500;
     border-radius: 50%;
     margin: 0 auto 1.5rem;
     box-shadow: 0 8px 24px var(--shadow-medium);
 }
 
 .step-title {
-    font-family: var(--font-secondary);
+    font-family: var(--font-headings);
     font-size: 1.5rem;
     color: var(--neutral-charcoal);
     margin-bottom: 1rem;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .step-description {
@@ -431,11 +510,11 @@ body {
 }
 
 .product-title {
-    font-family: var(--font-secondary);
+    font-family: var(--font-headings);
     font-size: 1.3rem;
     color: var(--neutral-charcoal);
     margin-bottom: 0.5rem;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .product-description {
@@ -473,11 +552,12 @@ body {
 }
 
 .about-description {
-    font-family: var(--font-secondary);
+    font-family: var(--font-primary);
     font-size: 1.15rem;
     color: var(--warm-gray);
     line-height: 1.7;
     margin-bottom: 2rem;
+    font-weight: 400;
 }
 
 .about-highlight {
@@ -502,9 +582,9 @@ body {
    ============================================================================= */
 .cta-section {
     padding: var(--spacing-xxl) 0;
-    background: linear-gradient(135deg, var(--primary-blush) 0%, var(--accent-coral) 100%);
+    background: var(--primary-blush);
     text-align: center;
-    color: var(--soft-white);
+    color: rgb(18, 18, 18);
 }
 
 .cta-content {
@@ -517,16 +597,17 @@ body {
     font-family: var(--font-headings);
     font-size: 3.5rem;
     margin-bottom: 1.5rem;
-    font-weight: 600;
+    font-weight: 500;
     text-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .cta-description {
-    font-family: var(--font-secondary);
+    font-family: var(--font-primary);
     font-size: 1.3rem;
     margin-bottom: 3rem;
     opacity: 0.95;
     line-height: 1.6;
+    font-weight: 400;
 }
 
 .cta-button {
@@ -538,8 +619,8 @@ body {
     color: var(--neutral-charcoal);
     text-decoration: none;
     border-radius: var(--radius-md);
-    font-family: var(--font-secondary);
-    font-weight: 600;
+    font-family: var(--font-primary);
+    font-weight: 500;
     font-size: 1.2rem;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
     transition: var(--transition-soft);
@@ -571,10 +652,11 @@ body {
 }
 
 .footer-section h3 {
-    font-family: var(--font-secondary);
+    font-family: var(--font-headings);
     font-size: 1.3rem;
     margin-bottom: 1.5rem;
     color: var(--primary-blush);
+    font-weight: 500;
 }
 
 .footer-section p,
@@ -603,7 +685,8 @@ body {
    Responsive Design
    ============================================================================= */
 @media (max-width: 1024px) {
-    .nav-menu {
+    .nav-menu-left,
+    .nav-menu-right {
         display: none;
     }
     
@@ -611,7 +694,12 @@ body {
         display: block;
     }
     
-    .hero-title {
+    .nav-logo {
+        position: static;
+        transform: none;
+    }
+    
+    .hero-brand-name {
         font-size: 3.5rem;
     }
     
@@ -643,20 +731,33 @@ body {
         --spacing-xxl: 65px;
     }
     
+    .announcement-bar {
+        font-size: 12px;
+        padding: 10px 0;
+    }
+    
     .nav-container {
         padding: 0 var(--spacing-xs);
         height: 70px;
+    }
+    
+    .nav-header {
+        top: 40px; /* Adjusted for smaller announcement bar */
+    }
+    
+    .hero-section {
+        margin-top: 110px; /* Adjusted for smaller bars */
     }
     
     .nav-logo {
         height: 40px;
     }
     
-    .hero-title {
+    .hero-brand-name {
         font-size: 2.8rem;
     }
     
-    .hero-description {
+    .hero-tagline {
         font-size: 1.1rem;
     }
     
@@ -678,17 +779,17 @@ body {
 }
 
 @media (max-width: 480px) {
-    .hero-title {
+    .hero-brand-name {
         font-size: 2.2rem;
     }
     
-    .hero-subtitle {
-        font-size: 1.4rem;
+    .hero-tagline {
+        font-size: 1rem;
     }
     
     .hero-cta {
-        padding: 1rem 2rem;
-        font-size: 1rem;
+        padding: 0.8rem 2rem;
+        font-size: 0.9rem;
     }
     
     .section-title {

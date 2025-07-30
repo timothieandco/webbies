@@ -9,17 +9,57 @@
     <link rel="icon" type="image/svg+xml" href="">
 </head>
 <body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-content">
+            <span class="announcement-text">Interested in a Private Charmshop? Click Here!</span>
+            <button class="announcement-arrow" aria-label="Navigate announcement">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <!-- Navigation Header -->
     <nav class="nav-header">
         <div class="nav-container">
-            <img src="" alt="Timothie & Co" class="nav-logo">
-            <ul class="nav-menu">
-                <li><a href="#home" class="nav-link">Home</a></li>
-                <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
-                <li><a href="#products" class="nav-link">Collection</a></li>
-                <li><a href="#about" class="nav-link">Our Story</a></li>
-                <li><a href="./index.html" class="nav-link cta">Start Customizing</a></li>
+            <ul class="nav-menu nav-menu-left">
+                <li><a href="#chains" class="nav-link">Chains</a></li>
+                <li><a href="#charms" class="nav-link">Charms</a></li>
+                <li><a href="#collections" class="nav-link">Collections</a></li>
             </ul>
+            
+            <img src="" alt="Timothie & Co" class="nav-logo">
+            
+            <ul class="nav-menu nav-menu-right">
+                <li class="dropdown">
+                    <a href="#charmshops" class="nav-link">Charmshops</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#crew" class="nav-link dropdown-toggle">Crew <span class="dropdown-arrow">▼</span></a>
+                </li>
+                <li><a href="#search" class="nav-link nav-icon" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/>
+                        <path d="m15 15 6 6" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </a></li>
+                <li><a href="#account" class="nav-link nav-icon" aria-label="Account">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                        <path d="M5.5 20v-2a4 4 0 0 1 4-4h1a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </a></li>
+                <li><a href="#cart" class="nav-link nav-icon" aria-label="Cart">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="8" cy="18" r="2" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="18" cy="18" r="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M2 2h2l.6 3M6 13h12l2-7H5.4M6 13L5.4 5M6 13l-1.4 5M16 13v5" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </a></li>
+            </ul>
+            
             <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
         </div>
     </nav>
@@ -29,14 +69,10 @@
         <div class="hero-background"></div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <p class="hero-subtitle">Welcome to Timothie & Co</p>
-            <h1 class="hero-title">Craft Your Story, One Charm at a Time</h1>
-            <p class="hero-description">
-                Create personalized jewelry that tells your unique story. Choose from our curated collection of meaningful charms and design a piece that's exclusively yours.
-            </p>
+            <h1 class="hero-brand-name">timothie & co.</h1>
+            <p class="hero-tagline">Craft Your Story, One Charm at a Time</p>
             <a href="./index.html" class="hero-cta">
-                <span>Start Creating</span>
-                <span>✨</span>
+                <span>Shop all</span>
             </a>
         </div>
     </section>
@@ -222,13 +258,11 @@
                 <h3>Follow Us</h3>
                 <p><a href="#instagram">Instagram</a></p>
                 <p><a href="#tiktok">TikTok</a></p>
-                <p><a href="#pinterest">Pinterest</a></p>
-                <p><a href="#newsletter">Newsletter</a></p>
             </div>
         </div>
         
         <div class="footer-bottom">
-            <p>&copy; 2024 Timothie & Co. All rights reserved. | Privacy Policy | Terms of Service</p>
+            <p>&copy; 2025 Timothie & Co. All rights reserved. | Privacy Policy | Terms of Service</p>
         </div>
     </footer>
 </body>
