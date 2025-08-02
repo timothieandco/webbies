@@ -1,0 +1,32 @@
+
+INSERT INTO inventory (
+    aliexpress_product_id,
+    aliexpress_sku_id,
+    aliexpress_order_id,
+    aliexpress_order_line_id,
+    title,
+    image_url,
+    price_usd,
+    original_price,
+    price_info,
+    currency,
+    quantity,
+    attributes,
+    tags,
+    store_name,
+    store_page_url,
+    product_url,
+    order_date,
+    order_date_iso,
+    import_timestamp,
+    ignore_export,
+    status,
+    is_active,
+    category,
+    subcategory
+) VALUES 
+    ('1005004850446714', '12000030740656077', '8196483037978847', '8196483037988847', 'Cute Princess Charms For Bracelets Key Chain Earring Jewelry Making DIY Craft Pendants Handmade', 'https://ae01.alicdn.com/kf/Sfa2a1e2bd38f4e97a0d8954e5e3da1d0q.jpg_220x220.jpg', 3.97, '$3.97', '$3.97|3|97', 'USD', 1, '{"Metal color":"mix 10pairs","Ships From":"CHINA"}'::jsonb, ARRAY[], 'daydayup Store', 'https://www.aliexpress.com/store/1101148443', 'https://www.aliexpress.com/item/3256804664131962.html', '2024-12-01', '2024-12-01', 1754157202332, false, 'in_stock', true, 'chains', 'bracelet_chains'),
+    ('1005003355929663', '12000032569410780', '8196483038218847', '8196483038228847', 'Leopard Lion Mouse Rabbit Snake Bear White Elephant Charm Pendant,18K Gold Animal Necklace Bracelet Handmade Jewelry Supply M64', 'https://ae01.alicdn.com/kf/S877e92dba10b4889958bb779d7dbb3d0t.jpg_220x220.jpg', 3.78, '$3.78', '$3.78|3|78', 'USD', 6, '{"Color":"M649431L1-Gold"}'::jsonb, ARRAY[], 'Beadsfeeder Factory Store', 'https://www.aliexpress.com/store/1101553351', 'https://www.aliexpress.com/item/3256803169614911.html', '2024-12-01', '2024-12-01', 1754157202332, false, 'in_stock', true, 'chains', 'bracelet_chains'),
+    ('1005007586549736', '12000041402078399', '8196483038238847', '8196483038248847', 'Trendy Sports Shirt Ice Skates Dumbbell Sneakers Baseball Football Boots Charm Pendant,18K Gold DIY Necklace Jewelry Supply K85', 'https://ae01.alicdn.com/kf/S69a7dd6e3b6b410ca7626fce9c40496eJ.jpg_220x220.jpg', 0.42, '$0.42', '$0.42|0|42', 'USD', 6, '{"Color":"K858666L1"}'::jsonb, ARRAY[], 'Beadsfeeder Factory Store', 'https://www.aliexpress.com/store/1101553351', 'https://www.aliexpress.com/item/3256807400234984.html', '2024-12-01', '2024-12-01', 1754157202332, false, 'in_stock', true, 'charms', 'pendants'),
+    ('1005007586549736', '12000041402078402', '8196483038238847', '8196483038258847', 'Trendy Sports Shirt Ice Skates Dumbbell Sneakers Baseball Football Boots Charm Pendant,18K Gold DIY Necklace Jewelry Supply K85', 'https://ae01.alicdn.com/kf/S4475795c52d14e63a7d3a61cf61810cbM.jpg_220x220.jpg', 0.31, '$0.31', '$0.31|0|31', 'USD', 6, '{"Color":"K858430H1"}'::jsonb, ARRAY[], 'Beadsfeeder Factory Store', 'https://www.aliexpress.com/store/1101553351', 'https://www.aliexpress.com/item/3256807400234984.html', '2024-12-01', '2024-12-01', 1754157202332, false, 'in_stock', true, 'charms', 'pendants'),
+    ('1005007586549736', '12000041402078411', '8196483038238847', '8196483038268847', 'Trendy Sports Shirt Ice Skates Dumbbell Sneakers Baseball Football Boots Charm Pendant,18K Gold DIY Necklace Jewelry Supply K85', 'https://ae01.alicdn.com/kf/S582a97dd37d04a6693d6710c8b953b2cQ.jpg_220x220.jpg', 0.59, '$0.59', '$0.59|0|59', 'USD', 10, '{"Color":"K858683L1"}'::jsonb, ARRAY[], 'Beadsfeeder Factory Store', 'https://www.aliexpress.com/store/1101553351', 'https://www.aliexpress.com/item/3256807400234984.html', '2024-12-01', '2024-12-01', 1754157202332, false, 'in_stock', true, 'charms', 'pendants');

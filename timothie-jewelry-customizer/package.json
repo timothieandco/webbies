@@ -13,7 +13,8 @@
   "author": "Timothie & Co",
   "license": "MIT",
   "dependencies": {
-    "konva": "^9.2.0"
+    "konva": "^9.2.0",
+    "@supabase/supabase-js": "^2.38.0"
   },
   "devDependencies": {
     "webpack": "^5.88.0",

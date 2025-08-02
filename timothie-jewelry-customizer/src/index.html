@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase SDK for backend integration -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="app-container">
@@ -92,12 +95,9 @@
                     <h3 class="section-title">Charm Library</h3>
                     
                     <!-- Charm Categories -->
-                    <div class="charm-categories">
-                        <button class="category-btn active" data-category="all">All</button>
-                        <button class="category-btn" data-category="symbols">Symbols</button>
-                        <button class="category-btn" data-category="letters">Letters</button>
-                        <button class="category-btn" data-category="birthstones">Birthstones</button>
-                        <button class="category-btn" data-category="animals">Animals</button>
+                    <div id="category-filters" class="charm-categories">
+                        <!-- Categories will be loaded dynamically from backend -->
+                        <button class="category-btn active" data-category="all">All (Loading...)</button>
                     </div>
 
                     <!-- Search -->
@@ -123,6 +123,10 @@
                         <div class="stat-item">
                             <span class="stat-label">Estimated Price:</span>
                             <span id="total-price" class="stat-value">$0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Inventory:</span>
+                            <span id="inventory-status" class="stat-value">Loading...</span>
                         </div>
                     </div>
                 </section>
