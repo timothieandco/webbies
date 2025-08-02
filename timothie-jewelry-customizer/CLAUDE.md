@@ -11,7 +11,6 @@ timothie-jewelry-customizer/
 ├── src/
 │   ├── assets/
 │   │   ├── fonts/                 # Authentic brand fonts
-│   │   │   ├── Cinzel-VariableFont_wght.ttf
 │   │   │   ├── DMSerifDisplay-*.ttf
 │   │   │   ├── DancingScript-VariableFont_wght.ttf
 │   │   │   └── PlayfairDisplay-*.ttf
@@ -81,7 +80,7 @@ timothie-jewelry-customizer/
   - Secondary: Dusty rose `rgb(245, 222, 221)`
   - Accent: Coral `rgb(210, 107, 101)`
   - Neutral: Dark charcoal `rgb(18, 18, 18)`
-- **Typography**: Cinzel (headings), Playfair Display (subheadings), Quicksand (body)
+- **Typography**: Funnel Display (headings), Playfair Display (subheadings), Quicksand (body)
 - **Aesthetic**: Romantic, elegant, minimalist with generous white space
 
 ## Development Workflow
@@ -176,6 +175,29 @@ Authentic brand fonts loaded via `@font-face` declarations:
 - [x] Hero background updated to workshop team scene
 - [x] Official poster logo integration in navbar
 - [x] Navbar background consistency on scroll
+
+### Phase 6: Home Page Layout Updates (Completed)
+- [x] How It Works section comprehensive redesign:
+  - Changed background to match Our Collection section
+  - Removed "Simple & Personal" subtitle
+  - Updated title from "HOW IT WORKS" to "Create Your Unique Style"
+  - Removed "Creating your perfect piece..." subheader
+  - Reduced padding before cards
+  - Replaced numbered icons with actual product photography
+  - Added jewelryCustomizer2.gif for better visual presentation
+- [x] Typography improvements:
+  - Replaced Cinzel font with Funnel Display for better readability
+  - Added Google Fonts import for Funnel Display (wght@300..800)
+  - Updated section titles to use new font family
+- [x] Layout and spacing optimizations:
+  - Removed gradient backgrounds from both main sections for cleaner look
+  - Trimmed Our Collection section from 6 cards to 3 cards
+  - Reduced section header padding and spacing
+  - Removed "Handcrafted Excellence" subtitle and description text
+- [x] Image and asset management:
+  - Updated jewelryCustomizer.gif to jewelryCustomizer2.gif (better cropped version)
+  - Removed old unused image files
+  - Updated JavaScript image mapping for streamlined card layout
 
 ## Future Enhancements
 

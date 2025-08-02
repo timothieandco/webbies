@@ -6,16 +6,11 @@
    Google Fonts Import
    ============================================================================= */
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap');
 
 /* =============================================================================
    Font Face Declarations - Authentic Brand Fonts
    ============================================================================= */
-@font-face {
-    font-family: 'Cinzel';
-    src: url('../assets/fonts/Cinzel-VariableFont_wght.ttf') format('truetype');
-    font-weight: 100 900;
-    font-display: swap;
-}
 
 @font-face {
     font-family: 'DM Serif Display';
@@ -377,8 +372,7 @@ h2 {
    How It Works Section
    ============================================================================= */
 .how-it-works {
-    padding: var(--spacing-xxl) 0;
-    background: var(--soft-white);
+    padding: var(--spacing-lg) 0;
 }
 
 .section-container {
@@ -400,11 +394,12 @@ h2 {
 }
 
 .section-title {
-    font-family: 'Cinzel', serif;
+    font-family: 'Funnel Display', serif;
     font-size: 3rem;
     color: var(--neutral-charcoal);
     margin-bottom: 1rem;
     font-weight: 500;
+    text-transform: none;
 }
 
 .section-description {
@@ -421,16 +416,14 @@ h2 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: var(--spacing-lg);
-    margin-top: var(--spacing-xl);
+    margin-top: var(--spacing-md);
 }
 
 .step-card {
-    text-align: center;
-    padding: var(--spacing-lg);
-    background: linear-gradient(135deg, var(--background-cream) 0%, var(--light-gray) 100%);
+    background: var(--soft-white);
     border-radius: var(--radius-lg);
-    border: 1px solid var(--border-light);
-    box-shadow: 0 8px 32px var(--shadow-soft);
+    overflow: hidden;
+    box-shadow: 0 12px 40px var(--shadow-soft);
     transition: var(--transition-soft);
 }
 
@@ -439,43 +432,43 @@ h2 {
     box-shadow: 0 16px 48px var(--shadow-medium);
 }
 
-.step-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, var(--accent-coral) 0%, var(--primary-blush) 100%);
-    color: var(--soft-white);
-    font-family: var(--font-headings);
-    font-size: 2rem;
-    font-weight: 500;
-    border-radius: 50%;
-    margin: 0 auto 1.5rem;
-    box-shadow: 0 8px 24px var(--shadow-medium);
+.step-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.step-info {
+    padding: var(--spacing-md);
+    text-align: center;
 }
 
 .step-title {
     font-family: var(--font-headings);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: var(--neutral-charcoal);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     font-weight: 500;
 }
 
 .step-description {
     font-family: var(--font-primary);
     color: var(--warm-gray);
-    line-height: 1.6;
-    font-size: 1.05rem;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    margin: 0;
 }
 
 /* =============================================================================
    Product Showcase Section
    ============================================================================= */
 .product-showcase {
-    padding: var(--spacing-xxl) 0;
-    background: linear-gradient(135deg, var(--light-gray) 0%, var(--secondary-dusty-rose) 100%);
+    padding: var(--spacing-lg) 0;
+}
+
+.product-showcase .section-header {
+    margin-bottom: var(--spacing-xs);
 }
 
 .products-grid {
@@ -528,8 +521,7 @@ h2 {
    About/Story Section
    ============================================================================= */
 .about-section {
-    padding: var(--spacing-xxl) 0;
-    background: var(--soft-white);
+    padding: var(--spacing-lg) 0;
 }
 
 .about-content {
@@ -544,11 +536,12 @@ h2 {
 }
 
 .about-title {
-    font-family: var(--font-headings);
-    font-size: 2.5rem;
+    font-family: 'Funnel Display', serif;
+    font-size: 3rem;
     color: var(--neutral-charcoal);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-weight: 500;
+    text-transform: none;
 }
 
 .about-description {
@@ -581,7 +574,7 @@ h2 {
    CTA Section
    ============================================================================= */
 .cta-section {
-    padding: var(--spacing-xxl) 0;
+    padding: var(--spacing-lg) 0;
     background: var(--primary-blush);
     text-align: center;
     color: rgb(18, 18, 18);
@@ -594,11 +587,12 @@ h2 {
 }
 
 .cta-title {
-    font-family: var(--font-headings);
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
+    font-family: 'Funnel Display', serif;
+    font-size: 3rem;
+    color: var(--neutral-charcoal);
+    margin-bottom: 1rem;
     font-weight: 500;
-    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    text-transform: none;
 }
 
 .cta-description {

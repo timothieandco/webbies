@@ -14,6 +14,7 @@ import workshopExcellence from '../../assets/images/ui/011A2674.jpg';
 import customCreations from '../../assets/images/ui/011A2744.jpg';
 import personalTouch from '../../assets/images/ui/011A2770.jpg';
 import aboutImage from '../../assets/images/ui/011A2771.jpg';
+import jewelryCustomizer from '../../assets/images/ui/jewelryCustomizer2.gif';
 
 export const homeImages = {
     // Logo
@@ -27,7 +28,8 @@ export const homeImages = {
     workshopExcellence,
     customCreations,
     personalTouch,
-    aboutImage
+    aboutImage,
+    jewelryCustomizer
 };
 
 export default homeImages;

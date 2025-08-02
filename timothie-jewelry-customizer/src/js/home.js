@@ -286,6 +286,9 @@ class ImageManager {
         // Update product/collection images
         this.updateProductImages();
         
+        // Update step images
+        this.updateStepImages();
+        
         // Update hero background
         this.updateHeroBackground();
         
@@ -311,13 +314,25 @@ class ImageManager {
         const productImageMap = [
             { selector: '.product-card:nth-child(1) .product-image', image: this.images.artisanCraftsmanship },
             { selector: '.product-card:nth-child(2) .product-image', image: this.images.premiumMaterials },
-            { selector: '.product-card:nth-child(3) .product-image', image: this.images.meaningfulDesigns },
-            { selector: '.product-card:nth-child(4) .product-image', image: this.images.workshopExcellence },
-            { selector: '.product-card:nth-child(5) .product-image', image: this.images.customCreations },
-            { selector: '.product-card:nth-child(6) .product-image', image: this.images.personalTouch }
+            { selector: '.product-card:nth-child(3) .product-image', image: this.images.meaningfulDesigns }
         ];
 
         productImageMap.forEach(({ selector, image }) => {
+            const element = document.querySelector(selector);
+            if (element && image) {
+                element.src = image;
+            }
+        });
+    }
+
+    updateStepImages() {
+        const stepImageMap = [
+            { selector: '.step-card:nth-child(1) .step-image', image: this.images.artisanCraftsmanship },
+            { selector: '.step-card:nth-child(2) .step-image', image: this.images.customCreations },
+            { selector: '.step-card:nth-child(3) .step-image', image: this.images.jewelryCustomizer }
+        ];
+
+        stepImageMap.forEach(({ selector, image }) => {
             const element = document.querySelector(selector);
             if (element && image) {
                 element.src = image;
