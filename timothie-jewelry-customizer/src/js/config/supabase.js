@@ -9,13 +9,13 @@
  */
 export const SUPABASE_CONFIG = {
   // Replace with your Supabase project URL
-  URL: process.env.SUPABASE_URL || 'https://your-project.supabase.co',
+  URL: process.env.SUPABASE_URL || 'https://pdymtscuudowgrcmbxoz.supabase.co',
   
   // Replace with your Supabase public anon key
-  ANON_KEY: process.env.SUPABASE_ANON_KEY || 'your-supabase-anon-key',
+  ANON_KEY: process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkeW10c2N1dWRvd2dyY21ieG96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxNjA4NTcsImV4cCI6MjA2OTczNjg1N30.qcv9WTDqEH09rmj0Fn_kDnwdw2t26-0RtW-qKQvE3RY',
   
   // Replace with your Supabase service role key (for admin operations)
-  SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || 'your-service-role-key'
+  SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkeW10c2N1dWRvd2dyY21ieG96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDE2MDg1NywiZXhwIjoyMDY5NzM2ODU3fQ.HqeKRGnIOistvGyPcnoWLoIOEgYmFpgHUajho9MxfCs'
 };
 
 /**
