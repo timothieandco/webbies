@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timothie & Co - Comprehensive Test Suite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .test-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .test-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .test-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .test-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .test-controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .btn.btn-success {
+            background: #28a745;
+        }
+
+        .btn.btn-success:hover {
+            background: #1e7e34;
+        }
+
+        .btn.btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn.btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .btn.btn-danger {
+            background: #dc3545;
+        }
+
+        .btn.btn-danger:hover {
+            background: #c82333;
+        }
+
+        .test-stats {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .stat-icon.passed {
+            background: #28a745;
+        }
+
+        .stat-icon.failed {
+            background: #dc3545;
+        }
+
+        .stat-icon.running {
+            background: #ffc107;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .test-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 80vh;
+        }
+
+        .test-sidebar {
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .test-category {
+            margin-bottom: 20px;
+        }
+
+        .test-category h3 {
+            font-size: 1.1rem;
+            color: #495057;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .test-list {
+            list-style: none;
+        }
+
+        .test-item {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .test-item:hover {
+            background: #e9ecef;
+        }
+
+        .test-item.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .test-item.passed {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+
+        .test-item.failed {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+
+        .test-item.running {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .test-status {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .test-main {
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .test-results {
+            margin-top: 20px;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .result-item.passed {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .result-item.failed {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .result-item.running {
+            border-color: #ffc107;
+            background: #fff3cd;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .result-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .result-time {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .result-description {
+            color: #495057;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .result-details {
+            background: white;
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .error-message {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .success-message {
+            color: #155724;
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007bff, #28a745);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .metric-label {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .test-navigation {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .nav-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-card h4 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .nav-card p {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .test-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .test-sidebar {
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+            
+            .test-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .control-group {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>Comprehensive Test Suite</h1>
+            <p>Complete buy-flow testing and performance optimization for Timothie & Co</p>
+        </div>
+
+        <div class="test-controls">
+            <div class="control-group">
+                <button class="btn btn-success" onclick="runAllTests()">Run All Tests</button>
+                <button class="btn" onclick="runSelectedTest()">Run Selected</button>
+                <button class="btn btn-warning" onclick="runPerformanceTests()">Performance Tests</button>
+                <button class="btn btn-danger" onclick="stopTests()">Stop Tests</button>
+            </div>
+
+            <div class="test-stats">
+                <div class="stat">
+                    <div class="stat-icon passed"></div>
+                    <span id="passedCount">0 Passed</span>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon failed"></div>
+                    <span id="failedCount">0 Failed</span>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon running"></div>
+                    <span id="runningCount">0 Running</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="test-content">
+            <div class="test-sidebar">
+                <div class="test-category">
+                    <h3>Cart Operations</h3>
+                    <ul class="test-list">
+                        <li class="test-item" data-test="cart-add-item" onclick="selectTest(this)">
+                            <span>Add Item to Cart</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="cart-remove-item" onclick="selectTest(this)">
+                            <span>Remove Item from Cart</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="cart-update-quantity" onclick="selectTest(this)">
+                            <span>Update Item Quantity</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="cart-clear-all" onclick="selectTest(this)">
+                            <span>Clear Cart</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="cart-persistence" onclick="selectTest(this)">
+                            <span>Cart Persistence</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="cart-calculations" onclick="selectTest(this)">
+                            <span>Price Calculations</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="test-category">
+                    <h3>User Journey</h3>
+                    <ul class="test-list">
+                        <li class="test-item" data-test="journey-home-to-browse" onclick="selectTest(this)">
+                            <span>Home → Browse</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="journey-browse-to-product" onclick="selectTest(this)">
+                            <span>Browse → Product</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="journey-product-to-customizer" onclick="selectTest(this)">
+                            <span>Product → Customizer</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="journey-customizer-to-checkout" onclick="selectTest(this)">
+                            <span>Customizer → Checkout</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="journey-complete-flow" onclick="selectTest(this)">
+                            <span>Complete Buy Flow</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="test-category">
+                    <h3>Inventory Integration</h3>
+                    <ul class="test-list">
+                        <li class="test-item" data-test="inventory-load-data" onclick="selectTest(this)">
+                            <span>Load Inventory Data</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="inventory-search" onclick="selectTest(this)">
+                            <span>Search Functionality</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="inventory-filtering" onclick="selectTest(this)">
+                            <span>Product Filtering</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="inventory-validation" onclick="selectTest(this)">
+                            <span>Stock Validation</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="inventory-realtime" onclick="selectTest(this)">
+                            <span>Real-time Updates</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="test-category">
+                    <h3>Customizer Features</h3>
+                    <ul class="test-list">
+                        <li class="test-item" data-test="customizer-load" onclick="selectTest(this)">
+                            <span>Customizer Load</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="customizer-drag-drop" onclick="selectTest(this)">
+                            <span>Drag & Drop</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="customizer-export" onclick="selectTest(this)">
+                            <span>Design Export</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="customizer-cart-integration" onclick="selectTest(this)">
+                            <span>Cart Integration</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="customizer-state-management" onclick="selectTest(this)">
+                            <span>State Management</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="test-category">
+                    <h3>Performance Tests</h3>
+                    <ul class="test-list">
+                        <li class="test-item" data-test="performance-page-load" onclick="selectTest(this)">
+                            <span>Page Load Times</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="performance-cart-operations" onclick="selectTest(this)">
+                            <span>Cart Operations</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="performance-image-loading" onclick="selectTest(this)">
+                            <span>Image Loading</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="performance-database" onclick="selectTest(this)">
+                            <span>Database Queries</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                        <li class="test-item" data-test="performance-memory" onclick="selectTest(this)">
+                            <span>Memory Usage</span>
+                            <span class="test-status">PENDING</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="test-main">
+                <div id="welcomeScreen">
+                    <h2>Welcome to the Comprehensive Test Suite</h2>
+                    <p>This testing system validates the complete buy-flow for Timothie & Co jewelry customizer, ensuring all components work seamlessly together.</p>
+                    
+                    <div class="performance-metrics">
+                        <div class="metric-card">
+                            <div class="metric-value" id="totalTests">24</div>
+                            <div class="metric-label">Total Tests</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="coveragePercent">0%</div>
+                            <div class="metric-label">Coverage</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="lastRunTime">Never</div>
+                            <div class="metric-label">Last Run</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="avgTestTime">0ms</div>
+                            <div class="metric-label">Avg Test Time</div>
+                        </div>
+                    </div>
+
+                    <div class="test-navigation">
+                        <h3>Quick Navigation</h3>
+                        <div class="nav-grid">
+                            <div class="nav-card" onclick="window.open('/src/home.html', '_blank')">
+                                <h4>Home Page</h4>
+                                <p>Brand showcase and navigation</p>
+                            </div>
+                            <div class="nav-card" onclick="window.open('/src/browse.html', '_blank')">
+                                <h4>Browse Products</h4>
+                                <p>Product discovery and filtering</p>
+                            </div>
+                            <div class="nav-card" onclick="window.open('/src/product.html', '_blank')">
+                                <h4>Product Details</h4>
+                                <p>Individual product pages</p>
+                            </div>
+                            <div class="nav-card" onclick="window.open('/src/index.html', '_blank')">
+                                <h4>Jewelry Customizer</h4>
+                                <p>Design and cart integration</p>
+                            </div>
+                            <div class="nav-card" onclick="window.open('/src/checkout.html', '_blank')">
+                                <h4>Checkout</h4>
+                                <p>Multi-step purchase flow</p>
+                            </div>
+                            <div class="nav-card" onclick="window.open('/src/order-confirmation.html', '_blank')">
+                                <h4>Order Confirmation</h4>
+                                <p>Success and order tracking</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="testResults" class="test-results hidden">
+                    <!-- Test results will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/src/js/utils/TestSuite.js"></script>
+    <script>
+        // Initialize the test suite
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTestSuite();
+        });
+    </script>
+</body>
+</html>

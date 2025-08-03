@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Browse Styling</title>
+    <link rel="stylesheet" href="./src/css/home.css">
+    <link rel="stylesheet" href="./src/css/browse.css">
+    <style>
+        body { padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 2px solid #ddd; }
+        .test-title { font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Testing Browse Page Styling</h1>
+    
+    <div class="test-section">
+        <div class="test-title">CSS Variables Check:</div>
+        <div id="css-vars"></div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">Sample Product Grid:</div>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image-container">
+                    <img src="./src/assets/images/ui/011A2614.jpg" alt="Test Product" class="product-image">
+                    <button class="quick-add-btn">Quick Add</button>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Gold Chain Necklace</h3>
+                    <p class="product-price">$89.99</p>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image-container">
+                    <img src="./src/assets/images/ui/011A2744.jpg" alt="Test Product" class="product-image">
+                    <button class="quick-add-btn">Quick Add</button>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Silver Charm</h3>
+                    <p class="product-price">$29.99</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">Filter Sidebar:</div>
+        <div class="filter-sidebar">
+            <div class="filter-group">
+                <h3 class="filter-title">Category</h3>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="checkbox" name="category" value="necklaces">
+                        <span>Necklaces</span>
+                        <span class="filter-count">(24)</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" name="category" value="charms">
+                        <span>Charms</span>
+                        <span class="filter-count">(48)</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Check CSS variables
+        const rootStyles = getComputedStyle(document.documentElement);
+        const cssVarsDiv = document.getElementById('css-vars');
+        
+        const varsToCheck = [
+            '--primary-pink',
+            '--secondary-rose',
+            '--accent-coral',
+            '--background-cream',
+            '--neutral-charcoal',
+            '--spacing-sm',
+            '--spacing-md',
+            '--spacing-lg',
+            '--radius-sm',
+            '--shadow-light'
+        ];
+        
+        varsToCheck.forEach(varName => {
+            const value = rootStyles.getPropertyValue(varName);
+            const div = document.createElement('div');
+            div.innerHTML = `<code>${varName}: ${value || 'NOT DEFINED'}</code>`;
+            if (!value) {
+                div.style.color = 'red';
+            }
+            cssVarsDiv.appendChild(div);
+        });
+        
+        // Check if styles are applied
+        const productCard = document.querySelector('.product-card');
+        if (productCard) {
+            console.log('Product card styles:', {
+                background: getComputedStyle(productCard).background,
+                borderRadius: getComputedStyle(productCard).borderRadius,
+                boxShadow: getComputedStyle(productCard).boxShadow
+            });
+        }
+    </script>
+</body>
+</html>

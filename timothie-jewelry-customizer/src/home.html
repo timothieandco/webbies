@@ -7,6 +7,7 @@
     <meta name="description" content="Discover personalized charm jewelry at Timothie & Co. Create unique necklaces with our custom charm selection and jewelry customizer tool.">
     <meta name="keywords" content="jewelry, charms, necklaces, customizer, personalized jewelry, handcrafted">
     <link rel="icon" type="image/svg+xml" href="">
+    <!-- CSS is bundled by webpack -->
 </head>
 <body>
     <!-- Announcement Bar -->
@@ -25,9 +26,9 @@
     <nav class="nav-header">
         <div class="nav-container">
             <ul class="nav-menu nav-menu-left">
-                <li><a href="#chains" class="nav-link">Chains</a></li>
-                <li><a href="#charms" class="nav-link">Charms</a></li>
-                <li><a href="#collections" class="nav-link">Collections</a></li>
+                <li><a href="./browse.html?category=chains" class="nav-link">Chains</a></li>
+                <li><a href="./browse.html?category=charms" class="nav-link">Charms</a></li>
+                <li><a href="./browse.html?category=collections" class="nav-link">Collections</a></li>
             </ul>
             
             <img src="" alt="Timothie & Co" class="nav-logo">
@@ -51,13 +52,7 @@
                         <path d="M5.5 20v-2a4 4 0 0 1 4-4h1a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/>
                     </svg>
                 </a></li>
-                <li><a href="#cart" class="nav-link nav-icon" aria-label="Cart">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <circle cx="8" cy="18" r="2" stroke="currentColor" stroke-width="2"/>
-                        <circle cx="18" cy="18" r="2" stroke="currentColor" stroke-width="2"/>
-                        <path d="M2 2h2l.6 3M6 13h12l2-7H5.4M6 13L5.4 5M6 13l-1.4 5M16 13v5" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                </a></li>
+                <li id="nav-cart-container"></li>
             </ul>
             
             <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
@@ -86,7 +81,7 @@
             
             <div class="steps-grid">
                 <div class="step-card">
-                    <img src="./assets/images/ui/011A2614.jpg" alt="Choose Your Base" class="step-image">
+                    <img src="" alt="Choose Your Base" class="step-image">
                     <div class="step-info">
                         <h3 class="step-title">Choose Your Base</h3>
                         <p class="step-description">
@@ -96,7 +91,7 @@
                 </div>
                 
                 <div class="step-card">
-                    <img src="./assets/images/ui/011A2744.jpg" alt="Add Your Charms" class="step-image">
+                    <img src="" alt="Add Your Charms" class="step-image">
                     <div class="step-info">
                         <h3 class="step-title">Add Your Charms</h3>
                         <p class="step-description">
@@ -106,7 +101,7 @@
                 </div>
                 
                 <div class="step-card">
-                    <img src="./assets/images/ui/jewelryCustomizer.gif" alt="Perfect & Order" class="step-image">
+                    <img src="" alt="Perfect & Order" class="step-image">
                     <div class="step-info">
                         <h3 class="step-title">Perfect & Order</h3>
                         <p class="step-description">
@@ -234,5 +229,6 @@
             <p>&copy; 2025 Timothie & Co. All rights reserved. | Privacy Policy | Terms of Service</p>
         </div>
     </footer>
+
 </body>
 </html>

@@ -1,5 +1,6 @@
 /* =============================================================================
    Timothie & Co Jewelry Customizer - Brand Design System
+   Enhanced with Cart Integration Styling
    ============================================================================= */
 
 /* =============================================================================
@@ -800,6 +801,344 @@ body {
     background: linear-gradient(135deg, var(--primary-blush) 0%, var(--accent-coral) 100%);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px var(--shadow-medium);
+}
+
+/* =============================================================================
+   Cart Integration Styles - Seamless Shopping Experience
+   ============================================================================= */
+
+/* Header Cart Icon */
+.header-cart-container {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.header-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+/* Cart Section in Sidebar */
+.cart-section {
+    background: linear-gradient(135deg, var(--soft-white) 0%, var(--light-gray) 100%);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-light);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    box-shadow: 0 4px 16px var(--shadow-soft);
+}
+
+.cart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xs);
+}
+
+.cart-toggle-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: var(--accent-coral);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-soft);
+}
+
+.cart-toggle-btn:hover {
+    background: var(--secondary-dusty-rose);
+    color: var(--neutral-charcoal);
+}
+
+.cart-container {
+    transition: var(--transition-soft);
+    overflow: hidden;
+}
+
+/* Quick Add Section */
+.quick-add-section {
+    background: var(--soft-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    box-shadow: 0 2px 12px var(--shadow-soft);
+}
+
+.quick-add-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: var(--spacing-xs);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 12px;
+}
+
+.quick-add-tab {
+    flex: 1;
+    padding: 8px 12px;
+    background: var(--light-gray);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--warm-gray);
+    font-family: var(--font-primary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-soft);
+}
+
+.quick-add-tab.active,
+.quick-add-tab:hover {
+    background: linear-gradient(135deg, var(--primary-blush) 0%, var(--secondary-dusty-rose) 100%);
+    color: var(--neutral-charcoal);
+    transform: translateY(-1px);
+}
+
+.quick-add-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.quick-add-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    background: var(--light-gray);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-soft);
+}
+
+.quick-add-item:hover {
+    background: var(--secondary-dusty-rose);
+    transform: translateX(2px);
+}
+
+.quick-add-image {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--border-light);
+}
+
+.quick-add-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.quick-add-name {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--neutral-charcoal);
+    line-height: 1.2;
+}
+
+.quick-add-price {
+    font-size: 0.75rem;
+    color: var(--accent-coral);
+    font-weight: 600;
+}
+
+.quick-add-btn {
+    padding: 4px 8px;
+    background: var(--accent-coral);
+    color: var(--soft-white);
+    border: none;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-quick);
+}
+
+.quick-add-btn:hover {
+    background: var(--primary-blush);
+    color: var(--neutral-charcoal);
+    transform: scale(1.05);
+}
+
+.no-items {
+    text-align: center;
+    color: var(--warm-gray);
+    font-style: italic;
+    font-size: 0.85rem;
+    padding: var(--spacing-xs);
+}
+
+/* Enhanced Control Buttons for Cart Actions */
+.control-btn.cart-action {
+    background: linear-gradient(135deg, var(--accent-coral) 0%, var(--primary-blush) 100%);
+    color: var(--soft-white);
+    border: 2px solid var(--accent-coral);
+}
+
+.control-btn.cart-action:hover {
+    background: linear-gradient(135deg, var(--primary-blush) 0%, var(--accent-coral) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--shadow-medium);
+}
+
+.control-btn.cart-action:disabled {
+    background: var(--warm-gray);
+    border-color: var(--warm-gray);
+    color: var(--light-gray);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Cart-specific Modal Styling */
+.export-option input[type="radio"]:checked + span {
+    color: var(--accent-coral);
+    font-weight: 600;
+}
+
+.export-option:has(input[value="cart"]) {
+    border: 2px solid var(--accent-coral);
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--secondary-dusty-rose) 0%, var(--light-gray) 100%);
+}
+
+/* Cart Integration Responsive Design */
+@media (max-width: 1024px) {
+    .cart-section {
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .quick-add-section {
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .quick-add-tabs {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    
+    .quick-add-tab {
+        font-size: 0.8rem;
+        padding: 6px 8px;
+    }
+    
+    .quick-add-items {
+        max-height: 150px;
+    }
+    
+    .control-btn.cart-action {
+        font-size: 0.85rem;
+        padding: 10px 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-navigation {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    
+    .header-cart-container {
+        margin-left: 0;
+        align-self: flex-end;
+    }
+    
+    .cart-section,
+    .quick-add-section {
+        margin-bottom: 16px;
+        padding: 16px;
+    }
+    
+    .quick-add-tabs {
+        justify-content: center;
+    }
+    
+    .quick-add-item {
+        padding: 12px;
+    }
+    
+    .quick-add-image {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .control-btn.cart-action {
+        width: 100%;
+        margin-top: 8px;
+    }
+}
+
+/* Cart Loading States */
+.cart-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm);
+    color: var(--warm-gray);
+    font-style: italic;
+}
+
+.cart-loading::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border-light);
+    border-top: 2px solid var(--accent-coral);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Cart Empty State */
+.cart-empty {
+    text-align: center;
+    padding: var(--spacing-sm);
+    color: var(--warm-gray);
+}
+
+.cart-empty-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+    opacity: 0.5;
+}
+
+.cart-empty-text {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Cart Success/Error States */
+.cart-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-xs);
+    border-left: 4px solid #28a745;
+}
+
+.cart-error {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-xs);
+    border-left: 4px solid #dc3545;
 }
 
 /* =============================================================================

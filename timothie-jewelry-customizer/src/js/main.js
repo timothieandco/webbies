@@ -108,12 +108,17 @@ class JewelryCustomizerApp {
             // Get UI elements
             this.getUIElements();
             
-            // Initialize the customizer
+            // Initialize the customizer with cart functionality
             this.customizer = new JewelryCustomizer('jewelry-canvas', {
                 width: 800,
                 height: 600,
                 maxCharms: 10,
-                enableAnimation: true
+                enableAnimation: true,
+                enableCart: true,
+                cartSidebarContainer: 'cart-sidebar-container',
+                cartIconContainer: 'cart-icon-container',
+                autoShowCartOnAdd: true,
+                enableCartIntegration: true
             });
 
             // Setup event callbacks
@@ -127,6 +132,9 @@ class JewelryCustomizerApp {
             
             // Populate necklace thumbnail
             this.populateNecklaceUI();
+            
+            // Initialize cart functionality
+            this.initializeCartFeatures();
             
             // Wait for customizer to initialize
             await this.waitForInitialization();
@@ -154,8 +162,14 @@ class JewelryCustomizerApp {
             redo: document.getElementById('redo-btn'),
             clear: document.getElementById('clear-btn'),
             save: document.getElementById('save-btn'),
-            export: document.getElementById('export-btn')
+            export: document.getElementById('export-btn'),
+            addToCart: document.getElementById('add-to-cart-btn')
         };
+
+        // Cart elements
+        this.elements.cartToggle = document.getElementById('toggle-cart');
+        this.elements.quickAddTabs = document.querySelectorAll('.quick-add-tab');
+        this.elements.quickAddItems = document.getElementById('quick-add-items');
 
         // Validate all elements exist
         for (const [key, element] of Object.entries(this.elements.controlButtons)) {
@@ -227,6 +241,30 @@ class JewelryCustomizerApp {
                 this.showExportModal();
             });
         }
+
+        if (this.elements.controlButtons.addToCart) {
+            this.elements.controlButtons.addToCart.addEventListener('click', () => {
+                this.addDesignToCart();
+            });
+        }
+
+        // Cart toggle
+        if (this.elements.cartToggle) {
+            this.elements.cartToggle.addEventListener('click', () => {
+                this.toggleCartSection();
+            });
+        }
+
+        // Quick add tabs
+        this.elements.quickAddTabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                this.selectQuickAddCategory(e.target.dataset.category);
+                
+                // Update active state
+                this.elements.quickAddTabs.forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
 
         // Modal interactions
         this.setupModalInteractions();
@@ -561,6 +599,13 @@ class JewelryCustomizerApp {
         const selectedFormat = Array.from(formatRadios).find(radio => radio.checked)?.value || 'png';
 
         try {
+            if (selectedFormat === 'cart') {
+                // Export to cart instead of downloading
+                await this.addDesignToCart();
+                this.hideExportModal();
+                return;
+            }
+
             const exportOptions = {
                 format: selectedFormat,
                 width: 1200,
@@ -584,6 +629,205 @@ class JewelryCustomizerApp {
         } catch (error) {
             console.error('Export failed:', error);
             this.showError('Export failed. Please try again.');
+        }
+    }
+
+    /**
+     * Initialize cart-specific features
+     */
+    async initializeCartFeatures() {
+        // Load quick add items
+        this.loadQuickAddItems();
+        
+        // Setup cart event listeners
+        this.setupCartEventListeners();
+        
+        // Initialize cart toggle state
+        this.initializeCartToggleState();
+    }
+
+    /**
+     * Setup cart-specific event listeners
+     */
+    setupCartEventListeners() {
+        // Listen for cart updates to update UI
+        document.addEventListener('cart-updated', (event) => {
+            this.updateCartRelatedUI(event.detail);
+        });
+
+        // Listen for design exported to cart
+        document.addEventListener('design-exported-to-cart', (event) => {
+            this.showMessage('Design successfully added to cart!', 'success');
+            this.updateDesignInfo();
+        });
+    }
+
+    /**
+     * Add current design to cart
+     */
+    async addDesignToCart() {
+        if (!this.customizer) {
+            this.showError('Customizer not initialized');
+            return;
+        }
+
+        try {
+            const designData = this.customizer.getDesignData();
+            if (!designData.charms || designData.charms.length === 0) {
+                this.showError('Please add some charms to your design before adding to cart');
+                return;
+            }
+
+            const metadata = {
+                name: `Custom Design ${new Date().toLocaleDateString()}`,
+                description: `Custom jewelry design with ${designData.charms.length} charms`,
+                price: this.calculateTotalPrice(),
+                category: 'custom-design'
+            };
+
+            await this.customizer.exportToCart(metadata);
+            
+        } catch (error) {
+            console.error('Failed to add design to cart:', error);
+            this.showError(error.message || 'Failed to add design to cart');
+        }
+    }
+
+    /**
+     * Toggle cart section visibility
+     */
+    toggleCartSection() {
+        const cartContainer = document.getElementById('cart-sidebar-container');
+        const toggleIcon = this.elements.cartToggle?.querySelector('.toggle-icon');
+        
+        if (cartContainer) {
+            const isHidden = cartContainer.style.display === 'none';
+            cartContainer.style.display = isHidden ? 'block' : 'none';
+            
+            if (toggleIcon) {
+                toggleIcon.textContent = isHidden ? '▲' : '▼';
+            }
+        }
+    }
+
+    /**
+     * Initialize cart toggle state
+     */
+    initializeCartToggleState() {
+        const cartContainer = document.getElementById('cart-sidebar-container');
+        if (cartContainer) {
+            cartContainer.style.display = 'block'; // Start expanded
+        }
+    }
+
+    /**
+     * Load quick add items
+     */
+    loadQuickAddItems() {
+        if (!this.elements.quickAddItems) return;
+
+        // Sample quick add items - these would come from your inventory API
+        const quickAddItems = {
+            chains: [
+                { id: 'chain-gold-18', name: 'Gold Chain 18"', price: 45, imageUrl: necklaceImages.plainChain },
+                { id: 'chain-silver-20', name: 'Silver Chain 20"', price: 35, imageUrl: necklaceImages.plainChain }
+            ],
+            charms: this.sampleCharms.slice(0, 4), // Show first 4 charms
+            accessories: [
+                { id: 'jump-rings', name: 'Jump Rings (10pk)', price: 8, imageUrl: '/placeholder-jump-rings.jpg' },
+                { id: 'jewelry-box', name: 'Gift Box', price: 12, imageUrl: '/placeholder-box.jpg' }
+            ]
+        };
+
+        // Load initial category (chains)
+        this.selectQuickAddCategory('chains', quickAddItems);
+    }
+
+    /**
+     * Select quick add category
+     */
+    selectQuickAddCategory(category, itemData = null) {
+        if (!this.elements.quickAddItems) return;
+
+        // Default items if not provided
+        const defaultItems = {
+            chains: [
+                { id: 'chain-gold-18', name: 'Gold Chain 18"', price: 45, imageUrl: necklaceImages.plainChain },
+                { id: 'chain-silver-20', name: 'Silver Chain 20"', price: 35, imageUrl: necklaceImages.plainChain }
+            ],
+            charms: this.sampleCharms.slice(0, 4),
+            accessories: [
+                { id: 'jump-rings', name: 'Jump Rings (10pk)', price: 8, imageUrl: '/placeholder-jump-rings.jpg' },
+                { id: 'jewelry-box', name: 'Gift Box', price: 12, imageUrl: '/placeholder-box.jpg' }
+            ]
+        };
+
+        const items = itemData ? itemData[category] : defaultItems[category];
+        
+        // Clear current items
+        this.elements.quickAddItems.innerHTML = '';
+
+        // Add items for selected category
+        if (items && items.length > 0) {
+            items.forEach(item => {
+                const itemElement = this.createQuickAddItem(item, category);
+                this.elements.quickAddItems.appendChild(itemElement);
+            });
+        } else {
+            this.elements.quickAddItems.innerHTML = '<p class="no-items">No items available</p>';
+        }
+    }
+
+    /**
+     * Create quick add item element
+     */
+    createQuickAddItem(item, category) {
+        const element = document.createElement('div');
+        element.className = 'quick-add-item';
+        
+        element.innerHTML = `
+            <img src="${item.imageUrl}" alt="${item.name}" class="quick-add-image" onerror="this.src='/placeholder.jpg'" />
+            <div class="quick-add-info">
+                <span class="quick-add-name">${item.name}</span>
+                <span class="quick-add-price">$${item.price}</span>
+            </div>
+            <button class="quick-add-btn" data-item-id="${item.id}">Add to Cart</button>
+        `;
+
+        // Add to cart handler
+        const addButton = element.querySelector('.quick-add-btn');
+        addButton.addEventListener('click', () => {
+            this.addItemToCart(item);
+        });
+
+        return element;
+    }
+
+    /**
+     * Add item to cart
+     */
+    async addItemToCart(item) {
+        if (!this.customizer) return;
+
+        try {
+            await this.customizer.addItemToCart(item, 1);
+            this.showMessage(`${item.name} added to cart!`, 'success');
+        } catch (error) {
+            console.error('Failed to add item to cart:', error);
+            this.showError(error.message || 'Failed to add item to cart');
+        }
+    }
+
+    /**
+     * Update cart-related UI elements
+     */
+    updateCartRelatedUI(cartSummary) {
+        // Update design info to show cart context
+        if (cartSummary) {
+            const inventoryStatusEl = document.getElementById('inventory-status');
+            if (inventoryStatusEl) {
+                inventoryStatusEl.textContent = `${cartSummary.itemCount} items in cart`;
+            }
         }
     }
 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Image Loading</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        img { max-width: 200px; margin: 10px; border: 1px solid #ccc; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Testing Image Loading Methods</h1>
+    
+    <div class="test-section">
+        <h2>1. Direct Relative Paths (from src)</h2>
+        <img src="./assets/images/ui/011A2771.jpg" alt="Hero BG" onerror="this.parentElement.innerHTML += '<p class=error>Failed to load hero BG</p>'" onload="this.parentElement.innerHTML += '<p class=success>Hero BG loaded!</p>'">
+        <img src="./assets/images/ui/011A2614.jpg" alt="Step 1" onerror="this.parentElement.innerHTML += '<p class=error>Failed to load Step 1</p>'" onload="this.parentElement.innerHTML += '<p class=success>Step 1 loaded!</p>'">
+        <img src="./assets/images/ui/jewelryCustomizer2.gif" alt="GIF" onerror="this.parentElement.innerHTML += '<p class=error>Failed to load GIF</p>'" onload="this.parentElement.innerHTML += '<p class=success>GIF loaded!</p>'">
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Testing Webpack Bundle Loading</h2>
+        <div id="webpack-test"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Console Output</h2>
+        <pre id="console-output"></pre>
+    </div>
+    
+    <script type="module">
+        const output = document.getElementById('console-output');
+        const log = (msg) => {
+            console.log(msg);
+            output.textContent += msg + '\n';
+        };
+        
+        log('Starting image loading test...');
+        
+        // Test webpack module loading
+        try {
+            import('./js/utils/homeImages.js').then(module => {
+                log('✓ homeImages module loaded successfully');
+                log('Image paths from webpack:');
+                const images = module.homeImages;
+                
+                const testDiv = document.getElementById('webpack-test');
+                for (const [key, path] of Object.entries(images)) {
+                    log(`  ${key}: ${path}`);
+                    
+                    const img = document.createElement('img');
+                    img.src = path;
+                    img.alt = key;
+                    img.title = path;
+                    
+                    const label = document.createElement('p');
+                    label.textContent = `${key}: `;
+                    
+                    img.onload = () => {
+                        label.innerHTML += '<span class="success">✓ Loaded</span>';
+                    };
+                    img.onerror = () => {
+                        label.innerHTML += '<span class="error">✗ Failed</span>';
+                    };
+                    
+                    testDiv.appendChild(label);
+                    testDiv.appendChild(img);
+                }
+            }).catch(err => {
+                log('✗ Failed to load homeImages module: ' + err.message);
+            });
+        } catch (err) {
+            log('✗ Error importing module: ' + err.message);
+        }
+    </script>
+</body>
+</html>

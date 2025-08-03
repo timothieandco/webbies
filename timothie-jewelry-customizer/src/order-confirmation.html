@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Timothie & Co</title>
+    <meta name="description" content="Your order has been confirmed. Thank you for choosing Timothie & Co for your jewelry needs.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/images/ui/Logo_Horiz.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/checkout.css">
+    
+    <!-- Security -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Order Confirmation - Timothie & Co">
+    <meta property="og:description" content="Your jewelry order has been confirmed">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/assets/images/ui/Timothie_and_Co_Posters_Poster_US_Canvases_1200_x_628_px_Website.png">
+    
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ConfirmationPage",
+        "name": "Order Confirmation - Timothie & Co",
+        "description": "Order confirmation for jewelry purchase",
+        "provider": {
+            "@type": "Organization",
+            "name": "Timothie & Co",
+            "url": "https://timothieandco.com"
+        }
+    }
+    </script>
+</head>
+<body class="confirmation-page">
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Header -->
+    <header class="header header--minimal" role="banner">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <div class="header-logo">
+                    <a href="/" aria-label="Timothie & Co Home">
+                        <img src="/assets/images/ui/Logo_Horiz.svg" alt="Timothie & Co" class="logo">
+                    </a>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="header-nav" role="navigation">
+                    <a href="/browse.html" class="nav-link">Continue Shopping</a>
+                    <a href="/account" class="nav-link">My Account</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+        <div class="container">
+            <!-- Loading State -->
+            <div id="confirmation-loading" class="confirmation-loading" aria-hidden="true">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading order details...</p>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="confirmation-error" class="confirmation-error" role="alert" aria-hidden="true">
+                <div class="error-content">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                    <h1>Order Not Found</h1>
+                    <p id="confirmation-error-message">We couldn't find your order details. Please check your order number and try again.</p>
+                    <div class="error-actions">
+                        <a href="/browse.html" class="btn btn-primary">Continue Shopping</a>
+                        <a href="/contact" class="btn btn-secondary">Contact Support</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Content -->
+            <div id="confirmation-content" class="confirmation-content" aria-hidden="true">
+                <!-- Success Header -->
+                <div class="confirmation-header">
+                    <div class="success-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22,4 12,14.01 9,11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h1>Order Confirmed!</h1>
+                    <p class="success-message">Thank you for your order. We've received your purchase and will begin processing it shortly.</p>
+                </div>
+
+                <!-- Order Details -->
+                <div class="order-details">
+                    <div class="order-summary-card">
+                        <div class="order-header">
+                            <div class="order-number">
+                                <h2>Order <span id="order-number-display">#</span></h2>
+                                <p class="order-date">Placed on <span id="order-date-display"></span></p>
+                            </div>
+                            <div class="order-status">
+                                <span class="status-badge status-badge--processing" id="order-status-display">Processing</span>
+                            </div>
+                        </div>
+
+                        <!-- Confirmation Email Notice -->
+                        <div class="email-confirmation">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <p>A confirmation email has been sent to <strong id="customer-email-display"></strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="order-items-section">
+                        <h3>Order Items</h3>
+                        <div id="order-items-container" class="order-items-list">
+                            <!-- Order items will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Order Information Grid -->
+                    <div class="order-info-grid">
+                        <!-- Shipping Information -->
+                        <div class="info-section">
+                            <h3>Shipping Address</h3>
+                            <div id="shipping-address-display" class="address-display">
+                                <!-- Shipping address will be populated here -->
+                            </div>
+                        </div>
+
+                        <!-- Billing Information -->
+                        <div class="info-section">
+                            <h3>Billing Address</h3>
+                            <div id="billing-address-display" class="address-display">
+                                <!-- Billing address will be populated here -->
+                            </div>
+                        </div>
+
+                        <!-- Payment Information -->
+                        <div class="info-section">
+                            <h3>Payment Method</h3>
+                            <div id="payment-method-display" class="payment-display">
+                                <!-- Payment method will be populated here -->
+                            </div>
+                        </div>
+
+                        <!-- Order Totals -->
+                        <div class="info-section">
+                            <h3>Order Total</h3>
+                            <div id="order-totals-display" class="totals-display">
+                                <!-- Order totals will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Information -->
+                <div class="order-timeline">
+                    <h3>What's Next?</h3>
+                    <div class="timeline-steps">
+                        <div class="timeline-step timeline-step--active">
+                            <div class="timeline-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22,4 12,14.01 9,11.01"></polyline>
+                                </svg>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>Order Confirmed</h4>
+                                <p>Your order has been received and is being processed</p>
+                                <span class="timeline-time">Just now</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step" id="production-step">
+                            <div class="timeline-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                </svg>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>In Production</h4>
+                                <p id="production-description">Your items are being carefully crafted</p>
+                                <span class="timeline-time" id="production-time">1-2 business days</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="timeline-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="1" y="3" width="15" height="13"></rect>
+                                    <polygon points="16,8 20,8 23,11 23,16 16,16 16,8"></polygon>
+                                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                </svg>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>Shipped</h4>
+                                <p>Your order is on its way to you</p>
+                                <span class="timeline-time" id="shipping-time">3-5 business days</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="timeline-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                                </svg>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>Delivered</h4>
+                                <p>Enjoy your beautiful new jewelry!</p>
+                                <span class="timeline-time" id="delivery-time">5-7 business days</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="confirmation-actions">
+                    <div class="action-buttons">
+                        <button type="button" id="print-receipt" class="btn btn-secondary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <polyline points="6,9 6,2 18,2 18,9"></polyline>
+                                <path d="M6,18H4a2,2 0 0,1-2-2v-5a2,2 0 0,1,2-2H20a2,2 0 0,1,2,2v5a2,2 0 0,1-2,2H18"></path>
+                                <rect x="6" y="14" width="12" height="8"></rect>
+                            </svg>
+                            Print Receipt
+                        </button>
+                        
+                        <button type="button" id="track-order" class="btn btn-secondary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="M21 21l-4.35-4.35"></path>
+                            </svg>
+                            Track Order
+                        </button>
+                        
+                        <a href="/browse.html" class="btn btn-primary">
+                            Continue Shopping
+                        </a>
+                    </div>
+
+                    <!-- Social Sharing -->
+                    <div class="social-sharing">
+                        <p>Share your beautiful purchase:</p>
+                        <div class="social-buttons">
+                            <button type="button" class="social-btn" data-platform="facebook" aria-label="Share on Facebook">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                            </button>
+                            
+                            <button type="button" class="social-btn" data-platform="twitter" aria-label="Share on Twitter">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                                </svg>
+                            </button>
+                            
+                            <button type="button" class="social-btn" data-platform="instagram" aria-label="Share on Instagram">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C3.334 14.24 2.29 12.017 2.29 12.017s1.044-2.223 2.836-3.674c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c1.792 1.451 2.836 3.674 2.836 3.674s-1.044 2.223-2.836 3.674c-.875.807-2.026 1.297-3.323 1.297z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Service -->
+                <div class="customer-service">
+                    <h3>Questions about your order?</h3>
+                    <p>Our customer service team is here to help you with any questions or concerns.</p>
+                    <div class="service-contact">
+                        <a href="tel:+1-555-123-4567" class="contact-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <div>
+                                <strong>(555) 123-4567</strong>
+                                <span>Mon-Fri 9AM-6PM EST</span>
+                            </div>
+                        </a>
+                        
+                        <a href="mailto:support@timothieandco.com" class="contact-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <div>
+                                <strong>support@timothieandco.com</strong>
+                                <span>We'll respond within 24 hours</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer footer--minimal" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Links -->
+                <div class="footer-links">
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/returns">Returns</a>
+                    <a href="/contact">Contact</a>
+                    <a href="/size-guide">Size Guide</a>
+                    <a href="/care-instructions">Care Instructions</a>
+                </div>
+                
+                <!-- Copyright -->
+                <div class="footer-copyright">
+                    <p>&copy; 2025 Timothie & Co. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts handled by webpack -->
+    
+    <!-- Analytics -->
+    <script>
+        // Enhanced ecommerce tracking for order confirmation
+        console.log('E-commerce tracking placeholder for order confirmation');
+    </script>
+</body>
+</html>

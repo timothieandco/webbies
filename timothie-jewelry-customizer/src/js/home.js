@@ -280,6 +280,19 @@ class ImageManager {
     }
 
     init() {
+        console.log('ImageManager init - homeImages:', this.images);
+        
+        // Ensure DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.updateAllImages());
+        } else {
+            this.updateAllImages();
+        }
+    }
+    
+    updateAllImages() {
+        console.log('Updating all images...');
+        
         // Update logo images
         this.updateLogoImages();
         
@@ -332,10 +345,12 @@ class ImageManager {
             { selector: '.step-card:nth-child(3) .step-image', image: this.images.jewelryCustomizer }
         ];
 
-        stepImageMap.forEach(({ selector, image }) => {
+        stepImageMap.forEach(({ selector, image }, index) => {
             const element = document.querySelector(selector);
+            console.log(`Step image ${index + 1}: selector="${selector}", element=${element ? 'found' : 'not found'}, image="${image}"`);
             if (element && image) {
                 element.src = image;
+                console.log(`Set step image ${index + 1} src to: ${image}`);
             }
         });
     }
@@ -343,7 +358,14 @@ class ImageManager {
     updateHeroBackground() {
         // Update hero background image via CSS custom property
         if (this.images.heroBackground) {
+            console.log('Setting hero background:', this.images.heroBackground);
             document.documentElement.style.setProperty('--hero-bg-image', `url('${this.images.heroBackground}')`);
+            
+            // Also set it directly on the element as a fallback
+            const heroBackground = document.querySelector('.hero-background');
+            if (heroBackground) {
+                heroBackground.style.backgroundImage = `url('${this.images.heroBackground}')`;
+            }
         }
     }
 
@@ -378,11 +400,46 @@ class AnnouncementBar {
 }
 
 // =============================================================================
+// Cart Integration - DISABLED FOR DEBUGGING
+// =============================================================================
+// class HomeCartIntegration {
+//     constructor() {
+//         this.cartManager = null;
+//         this.cartIcon = null;
+//         this.init();
+//     }
+
+//     async init() {
+//         try {
+//             // Initialize cart manager
+//             this.cartManager = new CartManager();
+//             await this.cartManager.initialize();
+
+//             // Initialize cart icon in navigation
+//             this.cartIcon = new CartIcon('nav-cart-container', this.cartManager, {
+//                 style: 'minimal',
+//                 size: 'medium',
+//                 showCount: true,
+//                 showTotal: false,
+//                 clickAction: 'sidebar',
+//                 tooltipEnabled: true
+//             });
+
+//             console.log('Home cart integration initialized');
+//         } catch (error) {
+//             console.error('Failed to initialize cart integration:', error);
+//         }
+//     }
+// }
+
+// =============================================================================
 // Initialize All Components
 // =============================================================================
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize image manager first to load all images
-    new ImageManager();
+// Initialize all components
+function initializeApp() {
+    try {
+        // Initialize image manager first to load all images
+        new ImageManager();
     
     // Initialize loading animation
     new LoadingAnimation();
@@ -486,7 +543,14 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     
     document.head.insertAdjacentHTML('beforeend', additionalStyles);
-});
+    
+    } catch (error) {
+        console.error('Error during app initialization:', error);
+    }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeApp);
 
 // =============================================================================
 // Export for potential use in other modules

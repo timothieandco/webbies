@@ -8,7 +8,7 @@ import logoHorizontal from '../../assets/images/ui/Timothie_and_Co_Posters_Poste
 // Collection/Product images for home page
 import artisanCraftsmanship from '../../assets/images/ui/011A2614.jpg';
 import premiumMaterials from '../../assets/images/ui/011A2618.jpg';
-import heroBackground from '../../assets/images/ui/011A2658_499ee37e-2c3a-444d-8cf8-d5e72594f535.jpg';
+import heroBackground from '../../assets/images/ui/011A2771.jpg';
 import meaningfulDesigns from '../../assets/images/ui/011A2632_1.jpg';
 import workshopExcellence from '../../assets/images/ui/011A2674.jpg';
 import customCreations from '../../assets/images/ui/011A2744.jpg';
@@ -31,5 +31,6 @@ export const homeImages = {
     aboutImage,
     jewelryCustomizer
 };
+
 
 export default homeImages;

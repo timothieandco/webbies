@@ -5,7 +5,8 @@
 
 import { getAPI } from './InventoryAPI.js';
 import { CATEGORIES, STATUS, DataTransformers } from '../types/inventory.js';
-import { STORAGE_KEYS, EVENTS, CSS_CLASSES } from '../config/supabase.js';
+import { EVENTS } from '../config/events.js';
+import { STORAGE_KEYS, CSS_CLASSES } from '../config/supabase.js';
 
 /**
  * Service class for inventory management in the jewelry customizer
@@ -232,6 +233,183 @@ export class InventoryService {
       color: this.extractColor(item.attributes),
       weight: this.extractWeight(item.attributes)
     };
+  }
+
+  // ===========================================
+  // Browse Page Integration
+  // ===========================================
+
+  /**
+   * Get products for browsing with filtering and pagination
+   * @param {Object} options - Options for fetching products
+   * @returns {Promise<Object>} Products response
+   */
+  async getProducts(options = {}) {
+    try {
+      const {
+        category,
+        search,
+        priceMin,
+        priceMax,
+        materials,
+        inStockOnly = true,
+        sortBy = 'featured',
+        page = 1,
+        limit = 12,
+        includeOutOfStock = false,
+        excludeIds = []
+      } = options;
+
+      // Build filters for API
+      const filters = {
+        status: STATUS.ACTIVE
+      };
+
+      if (category) {
+        filters.category = category;
+      }
+
+      if (search) {
+        filters.search = search;
+      }
+
+      if (priceMin !== null && priceMin !== undefined) {
+        filters.price_min = priceMin;
+      }
+
+      if (priceMax !== null && priceMax !== undefined) {
+        filters.price_max = priceMax;
+      }
+
+      if (materials && materials.length > 0) {
+        filters.materials = materials;
+      }
+
+      if (inStockOnly && !includeOutOfStock) {
+        filters.in_stock_only = true;
+      }
+
+      if (excludeIds && excludeIds.length > 0) {
+        filters.exclude_ids = excludeIds;
+      }
+
+      // Add pagination
+      const pagination = {
+        page,
+        limit,
+        sort_by: this.mapSortOption(sortBy)
+      };
+
+      const response = await this.api.getInventory(filters, pagination);
+      
+      return {
+        products: response.data.map(item => this.transformForBrowse(item)),
+        total: response.total || response.data.length,
+        page: response.page || 1,
+        totalPages: Math.ceil((response.total || response.data.length) / limit)
+      };
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return {
+        products: [],
+        total: 0,
+        page: 1,
+        totalPages: 0
+      };
+    }
+  }
+
+  /**
+   * Get a single product by ID
+   * @param {string} productId - Product ID
+   * @returns {Promise<Object|null>} Product data
+   */
+  async getProduct(productId) {
+    try {
+      const response = await this.api.getItem(productId);
+      return response ? this.transformForBrowse(response) : null;
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Transform inventory item for browse/product pages
+   * @param {Object} item - Raw inventory item
+   * @returns {Object} Transformed item for browse
+   */
+  transformForBrowse(item) {
+    return {
+      id: item.id,
+      name: item.title,
+      description: item.description || 'Beautiful handcrafted jewelry piece',
+      price: parseFloat(item.price),
+      originalPrice: item.compare_at_price ? parseFloat(item.compare_at_price) : null,
+      compareAtPrice: item.compare_at_price ? parseFloat(item.compare_at_price) : null,
+      image: item.image_url || '/src/assets/images/ui/011A2614.jpg',
+      images: item.additional_images ? [item.image_url, ...item.additional_images] : [item.image_url],
+      category: item.category || 'Jewelry',
+      stock: parseInt(item.quantity_available) || 0,
+      sku: item.sku,
+      material: this.extractMaterial(item.attributes),
+      dimensions: this.extractDimensions(item.attributes),
+      weight: this.extractWeight(item.attributes),
+      tags: item.tags || [],
+      rating: item.rating || 0,
+      reviewCount: item.review_count || 0,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
+      supplier: item.supplier_info?.store_name,
+      options: this.extractProductOptions(item.variants),
+      // Additional computed properties
+      isOutOfStock: parseInt(item.quantity_available) <= 0,
+      isLowStock: parseInt(item.quantity_available) > 0 && parseInt(item.quantity_available) < 5,
+      hasDiscount: item.compare_at_price && parseFloat(item.compare_at_price) > parseFloat(item.price),
+      discountPercentage: item.compare_at_price ? 
+        Math.round(((parseFloat(item.compare_at_price) - parseFloat(item.price)) / parseFloat(item.compare_at_price)) * 100) : 0
+    };
+  }
+
+  /**
+   * Extract product options from variants
+   * @param {Array} variants - Product variants
+   * @returns {Object} Product options
+   */
+  extractProductOptions(variants) {
+    if (!variants || !Array.isArray(variants)) return {};
+
+    const options = {};
+    variants.forEach(variant => {
+      if (variant.options) {
+        Object.entries(variant.options).forEach(([key, value]) => {
+          if (!options[key]) {
+            options[key] = [];
+          }
+          if (!options[key].includes(value)) {
+            options[key].push(value);
+          }
+        });
+      }
+    });
+
+    return options;
+  }
+
+  /**
+   * Map sort options to API format
+   * @param {string} sortBy - Sort option
+   * @returns {string} API sort format
+   */
+  mapSortOption(sortBy) {
+    const sortMap = {
+      featured: 'featured',
+      'price-low': 'price_asc',
+      'price-high': 'price_desc',
+      name: 'title_asc',
+      newest: 'created_desc'
+    };
+    return sortMap[sortBy] || 'featured';
   }
 
   // ===========================================

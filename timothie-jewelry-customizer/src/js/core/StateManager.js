@@ -1,6 +1,7 @@
 /**
  * StateManager - Handles undo/redo functionality and state persistence
  * Manages application state history with localStorage integration
+ * Now supports cart state integration for comprehensive state management
  */
 
 export default class StateManager {
@@ -9,6 +10,10 @@ export default class StateManager {
         this.currentIndex = -1;
         this.maxHistorySize = maxHistorySize;
         this.storageKey = 'timothie_jewelry_customizer_state';
+        
+        // Cart integration
+        this.cartManager = null;
+        this.cartStateSubscription = null;
         
         // Load existing state from localStorage if available
         this.loadFromStorage();
@@ -395,5 +400,314 @@ export default class StateManager {
         }
 
         return 0;
+    }
+
+    // ===========================================
+    // Cart Integration Methods
+    // ===========================================
+
+    /**
+     * Initialize cart integration
+     * @param {CartManager} cartManager - Cart manager instance
+     */
+    initializeCartIntegration(cartManager) {
+        if (!cartManager) {
+            console.warn('CartManager not provided for StateManager integration');
+            return;
+        }
+
+        this.cartManager = cartManager;
+        
+        // Subscribe to cart state changes to trigger design state saves
+        this.cartStateSubscription = this.cartManager.subscribe('cart-updated', (cartSummary) => {
+            // Don't save design state for every cart change, but mark as significant
+            this.markCartStateChange(cartSummary);
+        });
+
+        console.log('Cart integration initialized with StateManager');
+    }
+
+    /**
+     * Save design state with cart context
+     * @param {Object} designState - Design state
+     * @param {Object} cartContext - Cart context information
+     */
+    saveStateWithCartContext(designState, cartContext = {}) {
+        const enhancedState = {
+            ...designState,
+            cartContext: {
+                itemCount: cartContext.itemCount || 0,
+                total: cartContext.total || 0,
+                hasCartItems: cartContext.hasItems || false,
+                timestamp: Date.now()
+            }
+        };
+
+        return this.saveState(enhancedState);
+    }
+
+    /**
+     * Export current design to cart using cart manager
+     * @param {Object} designState - Current design state
+     * @param {Object} metadata - Design metadata
+     * @returns {Promise<Object>} Cart item created from design
+     */
+    async exportDesignToCart(designState, metadata = {}) {
+        if (!this.cartManager) {
+            throw new Error('Cart manager not initialized');
+        }
+
+        try {
+            // Create enhanced metadata with state information
+            const enhancedMetadata = {
+                ...metadata,
+                name: metadata.name || `Design ${new Date().toLocaleDateString()}`,
+                stateId: this.history[this.currentIndex]?.id,
+                stateTimestamp: this.history[this.currentIndex]?.timestamp,
+                canvasSettings: metadata.canvasSettings || {}
+            };
+
+            // Export to cart
+            const cartItem = await this.cartManager.exportDesignToCart(designState, enhancedMetadata);
+            
+            // Mark this state as exported
+            this.markStateAsExported(cartItem.id);
+            
+            // Save milestone for this export
+            this.markMilestone(`Exported to Cart: ${enhancedMetadata.name}`);
+
+            console.log('Design exported to cart successfully', cartItem);
+            return cartItem;
+        } catch (error) {
+            console.error('Failed to export design to cart:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Load design state and update cart context
+     * @param {number} stateIndex - State index to load
+     * @returns {Object} Loaded state with cart context
+     */
+    loadStateWithCartContext(stateIndex) {
+        const state = this.jumpToState(stateIndex);
+        
+        if (state && state.cartContext) {
+            // Emit cart context for UI updates
+            this.emitCartContextUpdate(state.cartContext);
+        }
+
+        return state;
+    }
+
+    /**
+     * Create a design bundle that includes both design and cart state
+     * @param {string} bundleName - Name for the bundle
+     * @returns {Object} Design bundle
+     */
+    createDesignBundle(bundleName) {
+        const currentDesignState = this.getCurrentState();
+        const currentCartState = this.cartManager ? this.cartManager.getCartState() : null;
+
+        return {
+            bundleName: bundleName,
+            designState: currentDesignState,
+            cartState: currentCartState,
+            timestamp: Date.now(),
+            version: '1.0'
+        };
+    }
+
+    /**
+     * Load a design bundle and restore both design and cart state
+     * @param {Object} bundle - Design bundle
+     * @returns {Promise<boolean>} Success status
+     */
+    async loadDesignBundle(bundle) {
+        try {
+            if (!bundle || !bundle.designState) {
+                throw new Error('Invalid design bundle format');
+            }
+
+            // Restore design state
+            if (bundle.designState) {
+                this.importHistory({
+                    history: [bundle.designState],
+                    currentIndex: 0,
+                    version: bundle.version || '1.0'
+                });
+            }
+
+            // Restore cart state if available and cart manager is initialized
+            if (bundle.cartState && this.cartManager) {
+                // Clear current cart
+                await this.cartManager.clearCart();
+                
+                // Add items from bundle
+                for (const item of bundle.cartState.items) {
+                    await this.cartManager.addItem(item, item.quantity, {
+                        skipValidation: true // Since this is a restore operation
+                    });
+                }
+            }
+
+            console.log(`Design bundle "${bundle.bundleName}" loaded successfully`);
+            return true;
+        } catch (error) {
+            console.error('Failed to load design bundle:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Get design state summary with cart information
+     * @returns {Object} Enhanced state summary
+     */
+    getEnhancedStateSummary() {
+        const baseSummary = this.getHistoryInfo();
+        const cartSummary = this.cartManager ? this.cartManager.getCartSummary() : null;
+
+        return {
+            ...baseSummary,
+            cartInfo: cartSummary ? {
+                itemCount: cartSummary.itemCount,
+                total: cartSummary.total,
+                hasItems: cartSummary.hasItems
+            } : null,
+            hasCartIntegration: !!this.cartManager,
+            exportedStates: this.getExportedStates()
+        };
+    }
+
+    /**
+     * Mark current state as exported to cart
+     * @param {string} cartItemId - Cart item ID
+     */
+    markStateAsExported(cartItemId) {
+        if (this.currentIndex >= 0 && this.history[this.currentIndex]) {
+            this.history[this.currentIndex].exported = true;
+            this.history[this.currentIndex].cartItemId = cartItemId;
+            this.history[this.currentIndex].exportedAt = Date.now();
+            this.saveToStorage();
+        }
+    }
+
+    /**
+     * Get all exported states
+     * @returns {Array} Exported states
+     */
+    getExportedStates() {
+        return this.history
+            .map((state, index) => ({ ...state, index }))
+            .filter(state => state.exported);
+    }
+
+    /**
+     * Mark cart state change for potential design state correlation
+     * @param {Object} cartSummary - Cart summary
+     */
+    markCartStateChange(cartSummary) {
+        // Store last cart change for potential correlation with design changes
+        this.lastCartChange = {
+            summary: cartSummary,
+            timestamp: Date.now()
+        };
+    }
+
+    /**
+     * Emit cart context update event
+     * @param {Object} cartContext - Cart context
+     */
+    emitCartContextUpdate(cartContext) {
+        const event = new CustomEvent('design-cart-context-updated', {
+            detail: cartContext
+        });
+        document.dispatchEvent(event);
+    }
+
+    /**
+     * Check if current design has been exported to cart
+     * @returns {boolean} Is current design exported
+     */
+    isCurrentDesignExported() {
+        if (this.currentIndex >= 0 && this.history[this.currentIndex]) {
+            return !!this.history[this.currentIndex].exported;
+        }
+        return false;
+    }
+
+    /**
+     * Get cart item ID for current design (if exported)
+     * @returns {string|null} Cart item ID
+     */
+    getCurrentDesignCartItemId() {
+        if (this.currentIndex >= 0 && this.history[this.currentIndex]) {
+            return this.history[this.currentIndex].cartItemId || null;
+        }
+        return null;
+    }
+
+    /**
+     * Remove export marking from current state
+     */
+    unmarkCurrentStateAsExported() {
+        if (this.currentIndex >= 0 && this.history[this.currentIndex]) {
+            delete this.history[this.currentIndex].exported;
+            delete this.history[this.currentIndex].cartItemId;
+            delete this.history[this.currentIndex].exportedAt;
+            this.saveToStorage();
+        }
+    }
+
+    /**
+     * Sync design state with cart when cart items are removed
+     * @param {string} cartItemId - Removed cart item ID
+     */
+    handleCartItemRemoved(cartItemId) {
+        // Find states that were exported as this cart item
+        const affectedStates = this.history.filter(state => state.cartItemId === cartItemId);
+        
+        // Remove export markings
+        affectedStates.forEach(state => {
+            delete state.exported;
+            delete state.cartItemId;
+            delete state.exportedAt;
+        });
+
+        if (affectedStates.length > 0) {
+            this.saveToStorage();
+            console.log(`Removed export markings for ${affectedStates.length} design states`);
+        }
+    }
+
+    /**
+     * Auto-save design when significant cart changes occur
+     * @param {Object} designState - Current design state
+     * @param {string} reason - Reason for auto-save
+     */
+    autoSaveForCartChange(designState, reason = 'Cart change') {
+        if (designState && designState.charms && designState.charms.length > 0) {
+            const enhancedState = {
+                ...designState,
+                autoSaved: true,
+                autoSaveReason: reason,
+                autoSaveTimestamp: Date.now()
+            };
+
+            this.saveState(enhancedState);
+            console.log(`Auto-saved design state: ${reason}`);
+        }
+    }
+
+    /**
+     * Cleanup cart integration
+     */
+    cleanupCartIntegration() {
+        if (this.cartStateSubscription) {
+            this.cartStateSubscription();
+            this.cartStateSubscription = null;
+        }
+        this.cartManager = null;
+        console.log('Cart integration cleaned up');
     }
 }

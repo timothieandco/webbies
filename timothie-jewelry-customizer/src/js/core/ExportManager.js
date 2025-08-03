@@ -39,6 +39,8 @@ export default class ExportManager {
                     return await this.exportPDF(options);
                 case 'json':
                     return this.exportJSON(options);
+                case 'cart':
+                    return await this.exportToCart(options);
                 default:
                     throw new Error(`Unsupported export format: ${format}`);
             }
@@ -504,6 +506,173 @@ export default class ExportManager {
     }
 
     /**
+     * Export design to cart
+     */
+    async exportToCart(options = {}) {
+        if (!this.customizer.cartManager) {
+            throw new Error('Cart functionality not available');
+        }
+
+        try {
+            // Get current design state
+            const currentState = this.getCurrentState();
+            if (!currentState || !currentState.charms || currentState.charms.length === 0) {
+                throw new Error('No design to export. Please add some charms first.');
+            }
+
+            // Calculate design pricing
+            const designPrice = this.calculateDesignPrice(currentState);
+            
+            // Generate thumbnail
+            const thumbnailDataURL = await this.exportAsDataURL({
+                width: 200,
+                height: 200,
+                pixelRatio: 1,
+                includeBackground: true,
+                includeInstructions: false
+            });
+
+            // Create enhanced metadata
+            const metadata = {
+                name: options.name || `Custom Design ${new Date().toLocaleDateString()}`,
+                description: options.description || `Custom jewelry design with ${currentState.charms.length} charms`,
+                price: designPrice,
+                category: 'custom-design',
+                thumbnailUrl: thumbnailDataURL,
+                designSpecs: this.generateDesignSpecs(currentState),
+                assemblyInstructions: this.generateAssemblyInstructions(),
+                ...options
+            };
+
+            // Export using the customizer's cart functionality
+            const cartItem = await this.customizer.exportToCart(metadata);
+
+            return {
+                type: 'cart',
+                cartItem: cartItem,
+                designData: currentState,
+                timestamp: Date.now(),
+                success: true
+            };
+
+        } catch (error) {
+            console.error('Failed to export to cart:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Export design as data URL for thumbnails
+     */
+    exportAsDataURL(options = {}) {
+        const {
+            width = 200,
+            height = 200,
+            pixelRatio = 1,
+            includeBackground = true,
+            includeInstructions = false
+        } = options;
+
+        try {
+            // Create export stage
+            const exportStage = new Konva.Stage({
+                container: document.createElement('div'),
+                width: width,
+                height: height
+            });
+
+            // Calculate scale factor
+            const originalWidth = this.customizer.stage.width();
+            const originalHeight = this.customizer.stage.height();
+            const scaleX = width / originalWidth;
+            const scaleY = height / originalHeight;
+            const scaleFactor = Math.min(scaleX, scaleY);
+
+            // Clone and scale background layer
+            if (includeBackground) {
+                const backgroundLayer = this.cloneLayer(this.customizer.backgroundLayer, scaleFactor, width, height);
+                exportStage.add(backgroundLayer);
+            }
+
+            // Clone and scale charm layer
+            const charmLayer = this.cloneLayer(this.customizer.charmLayer, scaleFactor, width, height);
+            exportStage.add(charmLayer);
+
+            // Generate data URL
+            const dataURL = exportStage.toDataURL({
+                mimeType: 'image/png',
+                quality: 1.0,
+                pixelRatio: pixelRatio
+            });
+
+            // Clean up
+            exportStage.destroy();
+
+            return dataURL;
+
+        } catch (error) {
+            console.error('Failed to generate data URL:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Get current design state
+     */
+    getCurrentState() {
+        return this.customizer.getDesignData();
+    }
+
+    /**
+     * Calculate design price based on components
+     */
+    calculateDesignPrice(designState) {
+        if (!designState || !designState.charms) return 0;
+
+        // Base design creation fee
+        let totalPrice = 25; // Custom design base price
+
+        // Add charm costs (assuming $15 average per charm for custom work)
+        totalPrice += designState.charms.length * 15;
+
+        // Add necklace base cost
+        if (designState.necklace) {
+            totalPrice += 35; // Base necklace cost
+        }
+
+        return totalPrice;
+    }
+
+    /**
+     * Generate design specifications
+     */
+    generateDesignSpecs(designState) {
+        const specs = {
+            type: 'Custom Jewelry Design',
+            components: {
+                necklace: designState.necklace ? {
+                    id: designState.necklace.id,
+                    name: designState.necklace.name
+                } : null,
+                charms: designState.charms.map(charm => ({
+                    id: charm.id,
+                    name: charm.name,
+                    position: { x: charm.x, y: charm.y },
+                    material: charm.material || 'sterling silver'
+                }))
+            },
+            metadata: {
+                charmCount: designState.charms.length,
+                createdAt: designState.timestamp || Date.now(),
+                estimatedAssemblyTime: this.estimateAssemblyTime(designState.charms.length),
+                difficulty: this.getDifficultyLevel(designState.charms.length)
+            }
+        };
+
+        return specs;
+    }
+
+    /**
      * Validate export options
      */
     validateExportOptions(options) {
@@ -521,7 +690,7 @@ export default class ExportManager {
             errors.push('Quality must be between 0.1 and 1.0');
         }
 
-        if (options.format && !Object.keys(this.exportFormats).includes(options.format.toUpperCase())) {
+        if (options.format && !Object.keys(this.exportFormats).includes(options.format.toUpperCase()) && options.format.toLowerCase() !== 'cart') {
             errors.push(`Unsupported format: ${options.format}`);
         }
 

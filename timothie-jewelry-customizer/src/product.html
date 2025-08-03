@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Timothie & Co</title>
+    <meta name="description" content="View detailed information about our handcrafted jewelry pieces. Customize and add to cart.">
+    <meta name="keywords" content="jewelry details, product information, customization, timothie co">
+    <link rel="icon" type="image/svg+xml" href="">
+    <!-- CSS is bundled by webpack -->
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-content">
+            <span class="announcement-text">Interested in a Private Charmshop? Click Here!</span>
+            <button class="announcement-arrow" aria-label="Navigate announcement">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <ul class="nav-menu nav-menu-left">
+                <li><a href="./browse.html?category=chains" class="nav-link">Chains</a></li>
+                <li><a href="./browse.html?category=charms" class="nav-link">Charms</a></li>
+                <li><a href="./browse.html?category=collections" class="nav-link">Collections</a></li>
+            </ul>
+            
+            <a href="./home.html" class="nav-logo-link">
+                <img src="" alt="Timothie & Co" class="nav-logo">
+            </a>
+            
+            <ul class="nav-menu nav-menu-right">
+                <li class="dropdown">
+                    <a href="#charmshops" class="nav-link">Charmshops</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#crew" class="nav-link dropdown-toggle">Crew <span class="dropdown-arrow">▼</span></a>
+                </li>
+                <li><a href="#search" class="nav-link nav-icon" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/>
+                        <path d="m15 15 6 6" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </a></li>
+                <li><a href="#account" class="nav-link nav-icon" aria-label="Account">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                        <path d="M5.5 20v-2a4 4 0 0 1 4-4h1a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </a></li>
+                <li id="nav-cart-container"></li>
+            </ul>
+            
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="section-container">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <ol class="breadcrumb-list">
+                    <li><a href="./home.html" class="breadcrumb-link">Home</a></li>
+                    <li><a href="./browse.html" class="breadcrumb-link">Browse</a></li>
+                    <li><a href="#" class="breadcrumb-link" id="breadcrumb-category">Category</a></li>
+                    <li class="breadcrumb-current" id="breadcrumb-product">Product</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-container" id="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Loading product details...</p>
+    </div>
+
+    <!-- Product Detail Content -->
+    <section class="product-detail" id="product-detail" style="display: none;">
+        <div class="section-container">
+            <div class="product-layout">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="gallery-main">
+                        <img src="" alt="" class="gallery-main-image" id="main-image">
+                        <div class="gallery-badges" id="gallery-badges">
+                            <!-- Dynamic status badges -->
+                        </div>
+                        <button class="gallery-zoom" id="zoom-btn" aria-label="Zoom image">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 3a6 6 0 1 0 6 6 6 6 0 0 0-6-6zm0 10a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"/>
+                                <path d="M13 13l4 4"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="gallery-thumbnails" id="gallery-thumbnails">
+                        <!-- Dynamic thumbnail images -->
+                    </div>
+                </div>
+
+                <!-- Product Information -->
+                <div class="product-info">
+                    <div class="product-header">
+                        <div class="product-category" id="product-category">Loading...</div>
+                        <h1 class="product-title" id="product-title">Loading Product...</h1>
+                        <div class="product-rating" id="product-rating">
+                            <!-- Dynamic rating -->
+                        </div>
+                    </div>
+
+                    <div class="product-pricing" id="product-pricing">
+                        <!-- Dynamic pricing -->
+                    </div>
+
+                    <div class="product-description" id="product-description">
+                        <p>Loading product description...</p>
+                    </div>
+
+                    <div class="product-details" id="product-details">
+                        <!-- Dynamic product specifications -->
+                    </div>
+
+                    <div class="product-options" id="product-options">
+                        <!-- Dynamic customization options -->
+                    </div>
+
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <label for="quantity">Quantity:</label>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" id="quantity-minus" aria-label="Decrease quantity">-</button>
+                                <input type="number" id="quantity" value="1" min="1" max="10">
+                                <button class="quantity-btn" id="quantity-plus" aria-label="Increase quantity">+</button>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn-add-to-cart primary" id="add-to-cart-btn">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l2-4A1 1 0 0016 6V3a1 1 0 00-1-1H3.28l-.22-.916A1 1 0 002 1H1a1 1 0 000 2h.78l.22.916"/>
+                                </svg>
+                                Add to Cart
+                            </button>
+                            
+                            <button class="btn-customize secondary" id="customize-btn">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                                </svg>
+                                Customize in Designer
+                            </button>
+                        </div>
+
+                        <div class="secondary-actions">
+                            <button class="btn-wishlist" id="wishlist-btn" aria-label="Add to wishlist">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 17.5L8.75 16.3C5.5 13.36 3.5 11.55 3.5 9.3c0-1.65 1.35-3 3-3 .99 0 1.98.51 2.5 1.3.52-.79 1.51-1.3 2.5-1.3 1.65 0 3 1.35 3 3 0 2.25-2 4.06-5.25 7L10 17.5z"/>
+                                </svg>
+                                Add to Wishlist
+                            </button>
+                            
+                            <button class="btn-share" id="share-btn" aria-label="Share product">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M15 8a3 3 0 1 0-2.977-2.63l-4.94 2.47a3 3 0 1 0 0 4.319l4.94 2.47a3 3 0 1 0 .895-1.789l-4.94-2.47a3.027 3.027 0 0 0 0-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
+                                </svg>
+                                Share
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-features" id="product-features">
+                        <div class="feature-item">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div>
+                                <h4>Quality Guarantee</h4>
+                                <p>Handcrafted with premium materials</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H19M7 13v6a2 2 0 002 2h4a2 2 0 002-2v-6m-6 0h6"/>
+                            </svg>
+                            <div>
+                                <h4>Free Shipping</h4>
+                                <p>On orders over $75</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            <div>
+                                <h4>Easy Returns</h4>
+                                <p>30-day return policy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    <section class="related-products" id="related-products" style="display: none;">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">You Might Also Like</h2>
+                <a href="./browse.html" class="view-all-link">View All</a>
+            </div>
+            <div class="related-grid" id="related-grid">
+                <!-- Dynamic related products -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar Integration -->
+    <div id="cart-sidebar-container"></div>
+
+    <!-- Image Zoom Modal -->
+    <div class="zoom-modal" id="zoom-modal">
+        <div class="zoom-modal-content">
+            <button class="zoom-close" id="zoom-close" aria-label="Close zoom">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <img src="" alt="" class="zoom-image" id="zoom-image">
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" id="error-state" style="display: none;">
+        <div class="section-container">
+            <div class="error-content">
+                <svg width="64" height="64" viewBox="0 0 64 64" fill="currentColor">
+                    <path d="M32 8C18.745 8 8 18.745 8 32s10.745 24 24 24 24-10.745 24-24S45.255 8 32 8zm0 44c-11.046 0-20-8.954-20-20s8.954-20 20-20 20 8.954 20 20-8.954 20-20 20z"/>
+                    <path d="M28 28h8v8h-8zm0-8h8v4h-8z"/>
+                </svg>
+                <h2>Product Not Found</h2>
+                <p>Sorry, we couldn't find the product you're looking for.</p>
+                <div class="error-actions">
+                    <a href="./browse.html" class="btn-add-to-cart">Browse All Products</a>
+                    <a href="./home.html" class="btn-customize">Go Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: hello@timothieandco.com</p>
+                <p>Phone: (555) 123-4567</p>
+                <p>Mon-Fri: 9AM-6PM EST</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Customer Care</h3>
+                <p><a href="#shipping">Shipping Information</a></p>
+                <p><a href="#returns">Returns & Exchanges</a></p>
+                <p><a href="#sizing">Sizing Guide</a></p>
+                <p><a href="#care">Jewelry Care</a></p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Company</h3>
+                <p><a href="./home.html#about">Our Story</a></p>
+                <p><a href="#craftsmanship">Craftsmanship</a></p>
+                <p><a href="#sustainability">Sustainability</a></p>
+                <p><a href="#careers">Careers</a></p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <p><a href="#instagram">Instagram</a></p>
+                <p><a href="#tiktok">TikTok</a></p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Timothie & Co. All rights reserved. | Privacy Policy | Terms of Service</p>
+        </div>
+    </footer>
+
+</body>
+</html>

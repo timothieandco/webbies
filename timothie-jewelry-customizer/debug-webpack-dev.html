@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Webpack Dev Server</title>
+</head>
+<body>
+    <h1>Webpack Dev Server Debug</h1>
+    
+    <h2>Testing Direct Asset Access</h2>
+    <p>CSS File: <a href="/css/styles.cb66b6cdfce275e9216f.css">/css/styles.cb66b6cdfce275e9216f.css</a></p>
+    <p>Home JS: <a href="/home.781cd4ab0fbdd2c32cf1.js">/home.781cd4ab0fbdd2c32cf1.js</a></p>
+    
+    <h2>Testing Image Access</h2>
+    <p>Hero Image: <img src="/images/011A2771.12c20dd4d2bab78805ea.jpg" style="max-width: 200px"></p>
+    
+    <h2>Console Output</h2>
+    <pre id="console"></pre>
+    
+    <script>
+        const log = (msg) => {
+            console.log(msg);
+            document.getElementById('console').textContent += msg + '\n';
+        };
+        
+        // Check if webpack public path is set
+        log('Webpack public path: ' + (window.__webpack_public_path__ || 'not set'));
+        
+        // Try to fetch CSS
+        fetch('/css/styles.cb66b6cdfce275e9216f.css')
+            .then(res => {
+                log('CSS fetch status: ' + res.status);
+                return res.text();
+            })
+            .then(text => {
+                log('CSS length: ' + text.length + ' bytes');
+            })
+            .catch(err => {
+                log('CSS fetch error: ' + err);
+            });
+            
+        // Check if any webpack modules are loaded
+        if (typeof __webpack_require__ !== 'undefined') {
+            log('Webpack require function exists');
+        } else {
+            log('No webpack require function found');
+        }
+    </script>
+</body>
+</html>

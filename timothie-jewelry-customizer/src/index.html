@@ -9,8 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Supabase SDK for backend integration -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase handled by webpack bundling -->
 </head>
 <body>
     <div class="app-container">
@@ -19,6 +18,9 @@
             <div class="header-content">
                 <div class="header-navigation">
                     <a href="./home.html" class="nav-home-link">← Back to Home</a>
+                    <div id="cart-icon-container" class="header-cart-container">
+                        <!-- Cart icon will be inserted here -->
+                    </div>
                 </div>
                 <h1 class="brand-title">Timothie & Co</h1>
                 <h2 class="page-title">Jewelry Customizer</h2>
@@ -72,12 +74,42 @@
                             <span class="btn-icon">📄</span>
                             Export Reference
                         </button>
+                        <button id="add-to-cart-btn" class="control-btn primary cart-action">
+                            <span class="btn-icon">🛒</span>
+                            Add Design to Cart
+                        </button>
                     </div>
                 </div>
             </section>
 
             <!-- Sidebar -->
             <aside class="sidebar">
+                <!-- Cart Section -->
+                <section class="cart-section">
+                    <div class="section-header cart-header">
+                        <h3 class="section-title">Shopping Cart</h3>
+                        <button id="toggle-cart" class="cart-toggle-btn">
+                            <span class="toggle-icon">▲</span>
+                        </button>
+                    </div>
+                    <div id="cart-sidebar-container" class="cart-container">
+                        <!-- Cart sidebar will be inserted here -->
+                    </div>
+                </section>
+
+                <!-- Quick Add Section -->
+                <section class="quick-add-section">
+                    <h3 class="section-title">Quick Add to Cart</h3>
+                    <div class="quick-add-tabs">
+                        <button class="quick-add-tab active" data-category="chains">Chains</button>
+                        <button class="quick-add-tab" data-category="charms">Charms</button>
+                        <button class="quick-add-tab" data-category="accessories">Accessories</button>
+                    </div>
+                    <div id="quick-add-items" class="quick-add-items">
+                        <!-- Quick add items will be loaded dynamically -->
+                    </div>
+                </section>
+
                 <!-- Necklace Selection -->
                 <section class="necklace-section">
                     <h3 class="section-title">Choose Your Base</h3>
@@ -160,6 +192,10 @@
                         <input type="radio" name="export-format" value="json">
                         <span>Data Export (JSON)</span>
                     </label>
+                    <label class="export-option">
+                        <input type="radio" name="export-format" value="cart">
+                        <span>Add to Cart</span>
+                    </label>
                 </div>
                 <div class="export-preview" id="export-preview">
                     <!-- Preview will be generated here -->
@@ -171,5 +207,7 @@
             </div>
         </div>
     </div>
+
+    <!-- Scripts handled by webpack -->
 </body>
 </html>

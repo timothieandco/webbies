@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug Images</title>
+</head>
+<body>
+    <h1>Debug Image Loading</h1>
+    
+    <h2>Direct Image Paths</h2>
+    <p>Hero Background (011A2771.jpg):</p>
+    <img src="./assets/images/ui/011A2771.jpg" alt="Test Hero" style="max-width: 200px;">
+    
+    <p>Step 1 (011A2614.jpg):</p>
+    <img src="./assets/images/ui/011A2614.jpg" alt="Test Step 1" style="max-width: 200px;">
+    
+    <p>Step 2 (011A2744.jpg):</p>
+    <img src="./assets/images/ui/011A2744.jpg" alt="Test Step 2" style="max-width: 200px;">
+    
+    <p>Step 3 (jewelryCustomizer2.gif):</p>
+    <img src="./assets/images/ui/jewelryCustomizer2.gif" alt="Test Step 3" style="max-width: 200px;">
+    
+    <p>Logo:</p>
+    <img src="./assets/images/ui/Timothie_and_Co_Posters_Poster_US_Canvases_1200_x_628_px_Website.png" alt="Test Logo" style="max-width: 200px;">
+    
+    <h2>Webpack Bundled Images</h2>
+    <div id="webpack-images"></div>
+    
+    <script type="module">
+        import { homeImages } from './js/utils/homeImages.js';
+        
+        console.log('Home Images:', homeImages);
+        
+        const container = document.getElementById('webpack-images');
+        for (const [key, value] of Object.entries(homeImages)) {
+            const p = document.createElement('p');
+            p.textContent = `${key}: ${value}`;
+            container.appendChild(p);
+            
+            const img = document.createElement('img');
+            img.src = value;
+            img.alt = key;
+            img.style.maxWidth = '200px';
+            img.style.display = 'block';
+            img.style.marginBottom = '20px';
+            container.appendChild(img);
+        }
+    </script>
+</body>
+</html>

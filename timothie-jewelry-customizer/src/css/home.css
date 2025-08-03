@@ -298,7 +298,7 @@ h2 {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: var(--hero-bg-image, url('../assets/images/ui/011A2623.jpg'));
+    background-image: var(--hero-bg-image);
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

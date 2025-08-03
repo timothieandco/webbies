@@ -9,13 +9,13 @@
  */
 export const SUPABASE_CONFIG = {
   // Replace with your Supabase project URL
-  URL: process.env.SUPABASE_URL || 'https://your-project.supabase.co',
+  URL: (typeof process !== 'undefined' && process.env) ? process.env.SUPABASE_URL || 'https://pdymtscuudowgrcmbxoz.supabase.co' : 'https://pdymtscuudowgrcmbxoz.supabase.co',
   
   // Replace with your Supabase public anon key
-  ANON_KEY: process.env.SUPABASE_ANON_KEY || 'your-supabase-anon-key',
+  ANON_KEY: (typeof process !== 'undefined' && process.env) ? process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkeW10c2N1dWRvd2dyY21ieG96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxNjA4NTcsImV4cCI6MjA2OTczNjg1N30.qcv9WTDqEH09rmj0Fn_kDnwdw2t26-0RtW-qKQvE3RY' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkeW10c2N1dWRvd2dyY21ieG96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxNjA4NTcsImV4cCI6MjA2OTczNjg1N30.qcv9WTDqEH09rmj0Fn_kDnwdw2t26-0RtW-qKQvE3RY',
   
   // Replace with your Supabase service role key (for admin operations)
-  SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || 'your-service-role-key'
+  SERVICE_ROLE_KEY: (typeof process !== 'undefined' && process.env) ? process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkeW10c2N1dWRvd2dyY21ieG96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDE2MDg1NywiZXhwIjoyMDY5NzM2ODU3fQ.HqeKRGnIOistvGyPcnoWLoIOEgYmFpgHUajho9MxfCs' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkeW10c2N1dWRvd2dyY21ieG96Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NDE2MDg1NywiZXhwIjoyMDY5NzM2ODU3fQ.HqeKRGnIOistvGyPcnoWLoIOEgYmFpgHUajho9MxfCs'
 };
 
 /**
@@ -60,7 +60,9 @@ export const TABLES = {
   PRODUCTS: 'products',
   DESIGNS: 'designs',
   ORDERS: 'orders',
-  ORDER_ITEMS: 'order_items'
+  ORDER_ITEMS: 'order_items',
+  USER_CARTS: 'user_carts',
+  GUEST_CARTS: 'guest_carts'
 };
 
 /**
@@ -78,9 +80,9 @@ export const RPC_FUNCTIONS = {
  * Environment detection
  */
 export const ENVIRONMENT = {
-  isDevelopment: process.env.NODE_ENV === 'development',
-  isProduction: process.env.NODE_ENV === 'production',
-  isTest: process.env.NODE_ENV === 'test'
+  isDevelopment: (typeof process !== 'undefined' && process.env) ? process.env.NODE_ENV === 'development' : window.location.hostname === 'localhost',
+  isProduction: (typeof process !== 'undefined' && process.env) ? process.env.NODE_ENV === 'production' : window.location.hostname !== 'localhost',
+  isTest: (typeof process !== 'undefined' && process.env) ? process.env.NODE_ENV === 'test' : false
 };
 
 /**
@@ -144,20 +146,12 @@ export const STORAGE_KEYS = {
   USER_PREFERENCES: 'timothie_user_preferences',
   DESIGN_DRAFTS: 'timothie_design_drafts',
   RECENT_SEARCHES: 'timothie_recent_searches',
-  SHOPPING_CART: 'timothie_shopping_cart'
+  SHOPPING_CART: 'timothie_shopping_cart',
+  GUEST_SESSION_ID: 'timothie_guest_session_id'
 };
 
-/**
- * Event names for custom events
- */
-export const EVENTS = {
-  INVENTORY_UPDATED: 'inventory-updated',
-  DESIGN_SAVED: 'design-saved',
-  ORDER_CREATED: 'order-created',
-  USER_AUTHENTICATED: 'user-authenticated',
-  USER_SIGNED_OUT: 'user-signed-out',
-  REAL_TIME_ERROR: 'real-time-error'
-};
+// EVENTS moved to separate file to avoid circular dependencies
+// Import from '../config/events.js' instead
 
 /**
  * CSS class names for styling
@@ -169,7 +163,9 @@ export const CSS_CLASSES = {
   WARNING: 'warning',
   DISABLED: 'disabled',
   ACTIVE: 'active',
-  SELECTED: 'selected'
+  SELECTED: 'selected',
+  UPDATED: 'updated',
+  CART_TRIGGER: 'cart-trigger'
 };
 
 /**
@@ -276,7 +272,6 @@ export default {
   SUCCESS_MESSAGES,
   VALIDATION_RULES,
   STORAGE_KEYS,
-  EVENTS,
   CSS_CLASSES,
   ConfigUtils
 };
