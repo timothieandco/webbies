@@ -3,6 +3,7 @@
  * Handles all inventory, product, design, and order operations
  */
 
+import { createClient } from '@supabase/supabase-js';
 import { CATEGORIES, STATUS, ORDER_STATUS, DEFAULT_PAGINATION, ValidationHelpers } from '../types/inventory.js';
 
 /**
@@ -19,8 +20,8 @@ export class InventoryAPI {
       throw new Error('Supabase URL and key are required');
     }
     
-    // Initialize Supabase client (assuming supabase-js is loaded)
-    this.client = supabase.createClient(supabaseUrl, supabaseKey);
+    // Initialize Supabase client
+    this.client = createClient(supabaseUrl, supabaseKey);
     this.isAuthenticated = false;
     this.currentUser = null;
     

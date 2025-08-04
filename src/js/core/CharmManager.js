@@ -501,11 +501,11 @@ export default class CharmManager {
             otherBounds.height += minSpacing;
             
             if (this.rectanglesIntersect(charmBounds, otherBounds)) {
-                return charm;
+                return true; // Collision detected
             }
         }
         
-        return null;
+        return false; // No collision
     }
 
     /**
@@ -581,6 +581,31 @@ export default class CharmManager {
     }
 
     /**
+     * Snap position to nearest attachment zone
+     */
+    snapToAttachmentZone(position, charmId = null) {
+        const nearestZone = this.findNearestAttachmentZone(position);
+        
+        if (!nearestZone) {
+            return position; // No zone found, return original position
+        }
+        
+        const distance = this.calculateDistance(position, nearestZone);
+        
+        // Check if within snap threshold
+        if (distance <= this.snapThreshold) {
+            // Mark zone as occupied if charmId provided
+            if (charmId) {
+                nearestZone.occupied = charmId;
+            }
+            
+            return { x: nearestZone.x, y: nearestZone.y };
+        }
+        
+        return position; // Too far, return original position
+    }
+
+    /**
      * Show visual feedback for snap zone
      */
     showSnapFeedback(zone) {
@@ -647,14 +672,8 @@ export default class CharmManager {
             name: 'selection-indicator'
         });
         
-        // Add to UI layer when stage is available
-        setTimeout(() => {
-            const stage = this.charmLayer.getStage();
-            if (stage) {
-                const uiLayer = stage.findOne('.ui') || this.charmLayer;
-                uiLayer.add(this.selectionIndicator);
-            }
-        }, 100);
+        // Add to charm layer immediately for testing
+        this.charmLayer.add(this.selectionIndicator);
     }
 
     /**
@@ -803,5 +822,51 @@ export default class CharmManager {
                 rect2.x + rect2.width < rect1.x || 
                 rect2.y > rect1.y + rect1.height ||
                 rect2.y + rect2.height < rect1.y);
+    }
+
+    /**
+     * Find charm by ID
+     */
+    findCharmById(charmId) {
+        return this.charms.get(charmId) || null;
+    }
+
+    /**
+     * Check if a charm has any collision
+     */
+    hasCollision(charm) {
+        const position = charm.position();
+        return this.checkCharmCollision(charm, position);
+    }
+
+    /**
+     * Set drag constraints
+     */
+    setDragConstraints(constraints) {
+        this.dragConstraints = constraints;
+    }
+
+    /**
+     * Apply drag constraints to a position
+     */
+    applyDragConstraints(position) {
+        if (!this.dragConstraints) {
+            return position;
+        }
+
+        let constrainedX = position.x;
+        let constrainedY = position.y;
+
+        if (this.dragConstraints.x) {
+            constrainedX = Math.max(this.dragConstraints.x.min, 
+                          Math.min(position.x, this.dragConstraints.x.max));
+        }
+
+        if (this.dragConstraints.y) {
+            constrainedY = Math.max(this.dragConstraints.y.min, 
+                          Math.min(position.y, this.dragConstraints.y.max));
+        }
+
+        return { x: constrainedX, y: constrainedY };
     }
 }

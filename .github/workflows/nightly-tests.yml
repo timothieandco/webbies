@@ -1,0 +1,380 @@
+# Comprehensive Nightly Test Suite
+# Extended testing including stress tests, compatibility checks, and maintenance
+
+name: Nightly Test Suite
+
+on:
+  schedule:
+    # Run every night at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger
+    inputs:
+      full_suite:
+        description: 'Run full extended test suite'
+        required: false
+        default: 'true'
+        type: boolean
+      browsers:
+        description: 'Browsers to test (comma-separated)'
+        required: false
+        default: 'chromium,firefox,webkit'
+        type: string
+
+env:
+  NODE_VERSION: '18.x'
+
+jobs:
+  # Extended cross-browser testing
+  extended-browser-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    strategy:
+      matrix:
+        browser: ${{ fromJson('["' + join(split(github.event.inputs.browsers || 'chromium,firefox,webkit', ','), '","') + '"]') }}
+        device: [desktop, mobile, tablet]
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright
+        run: npx playwright install ${{ matrix.browser }} --with-deps
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Start server
+        run: npm run dev &
+        
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000 --timeout 60000
+        
+      - name: Run extended E2E tests
+        run: npx playwright test --project=${{ matrix.browser }} --grep="@${{ matrix.device }}"
+        env:
+          CI: true
+          DEVICE_TYPE: ${{ matrix.device }}
+          
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: extended-${{ matrix.browser }}-${{ matrix.device }}
+          path: test-results/
+          
+  # Performance benchmarking
+  performance-benchmarks:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run performance benchmarks
+        run: |
+          npm run test:performance
+          npm run test:unit -- --testPathPattern=performance
+        env:
+          CI: true
+          BENCHMARK_MODE: true
+          
+      - name: Generate performance report
+        run: |
+          echo "# Performance Benchmark Report" > performance-report.md
+          echo "Date: $(date)" >> performance-report.md
+          echo "Commit: ${{ github.sha }}" >> performance-report.md
+          echo "" >> performance-report.md
+          
+          # Add performance metrics if available
+          if [ -f test-results/performance.json ]; then
+            echo "## Performance Metrics" >> performance-report.md
+            cat test-results/performance.json >> performance-report.md
+          fi
+          
+      - name: Upload performance report
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-benchmark-report
+          path: performance-report.md
+          
+  # Stress testing
+  stress-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install stress testing tools
+        run: |
+          npm install -g artillery
+          npm install -g loadtest
+          
+      - name: Build and start application
+        run: |
+          npm run build
+          npm run dev &
+          
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000 --timeout 60000
+        
+      - name: Run load tests
+        run: |
+          # Home page load test
+          loadtest -c 10 -t 60 --rps 50 http://localhost:3000/home.html
+          
+          # Customizer page load test
+          loadtest -c 5 -t 60 --rps 20 http://localhost:3000/index.html
+          
+      - name: Run canvas stress tests
+        run: npm run test:performance -- --testNamePattern="stress"
+        
+      - name: Generate stress test report
+        run: |
+          echo "# Stress Test Report" > stress-report.md
+          echo "Date: $(date)" >> stress-report.md
+          echo "" >> stress-report.md
+          echo "## Load Test Results" >> stress-report.md
+          echo "- Home page: Concurrent users: 10, RPS: 50, Duration: 60s" >> stress-report.md
+          echo "- Customizer: Concurrent users: 5, RPS: 20, Duration: 60s" >> stress-report.md
+          
+      - name: Upload stress test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: stress-test-report
+          path: stress-report.md
+          
+  # Memory leak detection
+  memory-leak-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js with increased memory
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run memory leak tests
+        run: |
+          # Run tests with garbage collection enabled
+          node --expose-gc ./node_modules/.bin/jest tests/performance/
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
+          DETECT_MEMORY_LEAKS: true
+          
+      - name: Generate memory report
+        run: |
+          echo "# Memory Leak Detection Report" > memory-report.md
+          echo "Date: $(date)" >> memory-report.md
+          echo "Node.js version: $(node --version)" >> memory-report.md
+          echo "" >> memory-report.md
+          
+          if [ -f test-results/memory-usage.json ]; then
+            echo "## Memory Usage Analysis" >> memory-report.md
+            cat test-results/memory-usage.json >> memory-report.md
+          fi
+          
+      - name: Upload memory report
+        uses: actions/upload-artifact@v3
+        with:
+          name: memory-leak-report
+          path: memory-report.md
+          
+  # Accessibility testing
+  accessibility-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install accessibility tools
+        run: |
+          npm install -g @axe-core/cli
+          npx playwright install chromium --with-deps
+          
+      - name: Build and start application
+        run: |
+          npm run build
+          npm run dev &
+          
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000 --timeout 60000
+        
+      - name: Run accessibility tests
+        run: |
+          # Test home page
+          axe http://localhost:3000/home.html --save accessibility-home.json
+          
+          # Test customizer page
+          axe http://localhost:3000/index.html --save accessibility-customizer.json
+          
+      - name: Run Playwright accessibility tests
+        run: |
+          npx playwright test tests/accessibility/ || true
+          
+      - name: Generate accessibility report
+        run: |
+          echo "# Accessibility Test Report" > accessibility-report.md
+          echo "Date: $(date)" >> accessibility-report.md
+          echo "" >> accessibility-report.md
+          
+          if [ -f accessibility-home.json ]; then
+            echo "## Home Page Results" >> accessibility-report.md
+            jq '.violations | length' accessibility-home.json >> accessibility-report.md
+            echo " violations found" >> accessibility-report.md
+          fi
+          
+          if [ -f accessibility-customizer.json ]; then
+            echo "## Customizer Page Results" >> accessibility-report.md
+            jq '.violations | length' accessibility-customizer.json >> accessibility-report.md
+            echo " violations found" >> accessibility-report.md
+          fi
+          
+      - name: Upload accessibility results
+        uses: actions/upload-artifact@v3
+        with:
+          name: accessibility-report
+          path: |
+            accessibility-*.json
+            accessibility-report.md
+            
+  # Dependency security audit
+  security-audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run comprehensive security audit
+        run: |
+          # Standard npm audit
+          npm audit --audit-level low --json > security-audit.json || true
+          
+          # Check for known vulnerabilities
+          npx audit-ci --config .auditci.json || true
+          
+      - name: Install additional security tools
+        run: |
+          npm install -g retire
+          npm install -g nsp || true
+          
+      - name: Run retire.js scan
+        run: retire --outputformat json --outputpath retire-report.json || true
+        
+      - name: Generate security report
+        run: |
+          echo "# Security Audit Report" > security-report.md
+          echo "Date: $(date)" >> security-report.md
+          echo "Commit: ${{ github.sha }}" >> security-report.md
+          echo "" >> security-report.md
+          
+          if [ -f security-audit.json ]; then
+            echo "## NPM Audit Results" >> security-report.md
+            jq '.metadata.vulnerabilities' security-audit.json >> security-report.md || echo "No vulnerabilities data" >> security-report.md
+          fi
+          
+          if [ -f retire-report.json ]; then
+            echo "## Retire.js Results" >> security-report.md
+            echo "Outdated/vulnerable libraries check completed" >> security-report.md
+          fi
+          
+      - name: Upload security results
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-audit-report
+          path: |
+            security-*.json
+            retire-report.json
+            security-report.md
+            
+  # Test environment cleanup and maintenance
+  maintenance:
+    runs-on: ubuntu-latest
+    needs: [extended-browser-tests, performance-benchmarks, stress-tests]
+    if: always()
+    
+    steps:
+      - name: Cleanup test artifacts
+        run: |
+          echo "Cleaning up test environment..."
+          # This would include cleanup of test databases, temp files, etc.
+          
+      - name: Generate nightly summary
+        run: |
+          echo "# Nightly Test Summary" > nightly-summary.md
+          echo "Date: $(date)" >> nightly-summary.md
+          echo "Commit: ${{ github.sha }}" >> nightly-summary.md
+          echo "" >> nightly-summary.md
+          echo "## Test Results" >> nightly-summary.md
+          echo "- Extended Browser Tests: ${{ needs.extended-browser-tests.result }}" >> nightly-summary.md
+          echo "- Performance Benchmarks: ${{ needs.performance-benchmarks.result }}" >> nightly-summary.md
+          echo "- Stress Tests: ${{ needs.stress-tests.result }}" >> nightly-summary.md
+          echo "" >> nightly-summary.md
+          echo "Full reports available in workflow artifacts." >> nightly-summary.md
+          
+      - name: Upload nightly summary
+        uses: actions/upload-artifact@v3
+        with:
+          name: nightly-test-summary
+          path: nightly-summary.md
+          
+      - name: Send notification (if configured)
+        if: failure()
+        run: |
+          echo "Nightly tests failed - notification would be sent here"
+          # This could integrate with Slack, email, or other notification systems

@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   entry: {
@@ -38,6 +39,14 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        SUPABASE_URL: JSON.stringify(process.env.SUPABASE_URL),
+        SUPABASE_ANON_KEY: JSON.stringify(process.env.SUPABASE_ANON_KEY),
+        SUPABASE_SERVICE_ROLE_KEY: JSON.stringify(process.env.SUPABASE_SERVICE_ROLE_KEY)
+      }
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html',
